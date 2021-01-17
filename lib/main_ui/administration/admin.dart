@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/main_ui/administration/chart.dart';
 import 'package:makhosi_app/main_ui/administration/report.dart';
@@ -13,6 +15,34 @@ class Admin extends StatefulWidget {
 }
 
 class _AdminState extends State<Admin> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  Map<String, dynamic> profileVisit;
+  int totalClient;
+
+  getData()async{
+    String id = FirebaseAuth.instance.currentUser.uid;
+
+    await FirebaseFirestore.instance.collection('bookings').where('appointment_to', isEqualTo: id).get().then((value) {
+      setState(() {
+        totalClient =value.docs.length;
+      });
+    });
+    await FirebaseFirestore.instance.collection('service_provider').doc(id).get().then((value){
+      setState(() {
+        profileVisit =value.data();
+      });
+    });
+    
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +52,17 @@ class _AdminState extends State<Admin> {
         child:
         ListView(
           children: [
-            sizeBox(70),
+            sizeBox(20),
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_rounded),
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            sizeBox(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -55,8 +95,8 @@ class _AdminState extends State<Admin> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-               detailsContainer('Total Clients', AppColors.REQUEST_UPPER),
-               detailsContainer('Total No. of Profile Visits', AppColors.COLOR_PRIMARY)
+               detailsContainer('Total Clients', AppColors.REQUEST_UPPER,totalClient),
+               detailsContainer1('Total No. of Profile Visits', AppColors.COLOR_PRIMARY,profileVisit)
               ],
             ),
             sizeBox(30),
@@ -113,7 +153,7 @@ class _AdminState extends State<Admin> {
     );
   }
 
-  Widget detailsContainer(String text, Color color){
+  Widget detailsContainer(String text, Color color, int number){
     double width =MediaQuery.of(context).size.width;
     return Stack(
       // alignment: Alignment.center,
@@ -132,9 +172,65 @@ class _AdminState extends State<Admin> {
               children: [
                 Icon(Icons.description_outlined,color: Colors.white,size: 35,),
                 sizeBox(20),
-                Text('150',style: TextStyle(
+                (number!=null)?Text(number.toString(),style: TextStyle(
                   color: Colors.white,fontWeight: FontWeight.w500,fontSize: 18,
+                ),):Center(child: CircularProgressIndicator(),),
+                Text(text,style: TextStyle(
+                  color: Colors.white,fontWeight: FontWeight.w600,fontSize: 14,
                 ),),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: -5,
+          right: -5,
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(.12)
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: -5,
+          left: -5,
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(.12)
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget detailsContainer1(String text, Color color, Map data){
+    double width =MediaQuery.of(context).size.width;
+    return Stack(
+      // alignment: Alignment.center,
+      children: [
+        Container(
+          height: 190,
+          width: width*.41,
+          decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(30)
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 30,right: 20, top: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.description_outlined,color: Colors.white,size: 35,),
+                sizeBox(20),
+                (data!=null)?Text((data['profileVisit'] !=null)?data['profileVisit'].toString(): '0',style: TextStyle(
+                  color: Colors.white,fontWeight: FontWeight.w500,fontSize: 18,
+                ),):Center(child: CircularProgressIndicator(),),
                 Text(text,style: TextStyle(
                   color: Colors.white,fontWeight: FontWeight.w600,fontSize: 14,
                 ),),
@@ -196,6 +292,9 @@ class _AdminState extends State<Admin> {
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         onTap: (index){
+          if(index==0){
+            Navigator.pop(context);
+          }
           if(index==1){
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context)=> MainDashboardScreen()

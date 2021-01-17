@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart' as rtc;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -10,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
 import 'package:makhosi_app/helper/api.dart';
+import 'package:makhosi_app/main_ui/backend/fullphoto.dart';
 import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/chat/payment_request.dart';
@@ -21,11 +25,14 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/notifications.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/permissions_handle.dart';
+import 'package:path/path.dart' as path;
 
 class PractitionerChatScreen extends StatefulWidget {
   String _patientUid, _myUid;
+  File image;
 
-  PractitionerChatScreen(this._patientUid);
+
+  PractitionerChatScreen(this._patientUid,{this.image});
 
   @override
   _PractitionerChatScreenState createState() => _PractitionerChatScreenState();
@@ -45,6 +52,8 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   TextEditingController customerNameController = new TextEditingController();
   TextEditingController complainController = new TextEditingController();
   DocumentSnapshot profile;
+
+  String messageType;
 
   @override
   void initState() {
@@ -712,7 +721,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
             ? WrapAlignment.start
             : WrapAlignment.end,
         children: [
-          Container(
+          snapshot.get('messageType')=='image'?_imageMessage(snapshot.get('message'), context,snapshot.get('is_received')):Container(
             padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
             margin: EdgeInsets.only(
               top: 4,
@@ -740,198 +749,213 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   Widget _getSendMessageSection() {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(left: 12, right: 12, bottom: 12),
-        height: 80,
-        child: Stack(
-          children: [
-            Container(
-              child: TextField(
-                controller: _messageController,
-                decoration: InputDecoration(
-                  hintText: 'Type your message...',
-                  hintStyle: TextStyle(
-                    fontSize: 13,
-                  ),
-                  contentPadding: EdgeInsets.all(12),
-                  enabledBorder: OutlineInputBorder(
-                    // borderRadius: BorderRadius.circular(32),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    borderSide: BorderSide(color: Colors.black26),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    // borderRadius: BorderRadius.circular(32),
-                    borderSide: BorderSide(color: Colors.black38),
+      child: Column(
+        children: [
+          (widget.image!=null)?Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: GestureDetector(
+                onTap: (){
+                  // messageType = 'image';
+                  uploadChatImage(context,widget.image).then((value)async{
+                    await _sendMessage(value,'image');
+                  });
+                },
+                child: Text('Send Invoice',style: TextStyle(color: AppColors.COLOR_PRIMARY,fontSize: 18,fontWeight: FontWeight.w600),)),
+          ):Container(),
+          Container(
+            color: Colors.white,
+            padding: EdgeInsets.only(left: 12, right: 12, bottom: 12),
+            height: 80,
+            child: Stack(
+              children: [
+                Container(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Type your message...',
+                      hintStyle: TextStyle(
+                        fontSize: 13,
+                      ),
+                      contentPadding: EdgeInsets.all(12),
+                      enabledBorder: OutlineInputBorder(
+                        // borderRadius: BorderRadius.circular(32),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.black26),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        // borderRadius: BorderRadius.circular(32),
+                        borderSide: BorderSide(color: Colors.black38),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                // SizedBox(
+                //   width: 8,
+                // ),
+                Positioned(
+                  top: 9,
+                  right: 15,
+                  // alignment: Alignment.bottomRight,
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          String message = _messageController.text.trim();
+                          if (message.isNotEmpty) {
+                            var user = await FirebaseFirestore.instance
+                                .collection(AppKeys.PRACTITIONERS)
+                                .doc(widget._myUid)
+                                .get();
+
+                            NotificationsUtills.sendMsgNotification(
+                                sender: widget._myUid,
+                                reciever: widget._patientUid,
+                                title:
+                                    'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                                message: message,
+                                body: {
+                                  'practitionerUid': widget._myUid,
+                                  'type': 'text',
+                                });
+                            _sendMessage(message, 'text');
+                            Others().hideKeyboard(context);
+                          }
+                        },
+                        child: Icon(
+                          Icons.add,
+                          color: AppColors.EDIT_PROFILE,
+                          size: 30,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          String message = _messageController.text.trim();
+                          if (message.isNotEmpty) {
+                            var user = await FirebaseFirestore.instance
+                                .collection(AppKeys.PRACTITIONERS)
+                                .doc(widget._myUid)
+                                .get();
+
+                            NotificationsUtills.sendMsgNotification(
+                                sender: widget._myUid,
+                                reciever: widget._patientUid,
+                                title:
+                                    'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                                message: message,
+                                body: {
+                                  'practitionerUid': widget._myUid,
+                                  'type': 'text',
+                                });
+                            _sendMessage(message, 'text');
+                          }
+                        },
+                        child: Icon(
+                          Icons.mood,
+                          color: AppColors.EDIT_PROFILE,
+                          size: 30,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          String message = _messageController.text.trim();
+                          if (message.isNotEmpty) {
+                            var user = await FirebaseFirestore.instance
+                                .collection(AppKeys.PRACTITIONERS)
+                                .doc(widget._myUid)
+                                .get();
+
+                            NotificationsUtills.sendMsgNotification(
+                                sender: widget._myUid,
+                                reciever: widget._patientUid,
+                                title:
+                                    'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                                message: message,
+                                body: {
+                                  'practitionerUid': widget._myUid,
+                                  'type': 'text',
+                                });
+                            _sendMessage(message, 'text');
+                          }
+                        },
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: AppColors.EDIT_PROFILE,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            // SizedBox(
-            //   width: 8,
+            // child: Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextField(
+            //         controller: _messageController,
+            //         decoration: InputDecoration(
+            //           hintText: 'Message...',
+            //           hintStyle: TextStyle(
+            //             fontSize: 13,
+            //           ),
+            //           contentPadding: EdgeInsets.all(12),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(32),
+            //             borderSide: BorderSide(color: Colors.black26),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(32),
+            //             borderSide: BorderSide(color: Colors.black38),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       width: 8,
+            //     ),
+            //     GestureDetector(
+            //       onTap: () {
+            //         String message = _messageController.text.trim();
+            //         if (message.isNotEmpty) {
+            //           _sendMessage(message);
+            //         }
+            //       },
+            //       child: Icon(
+            //         Icons.send,
+            //         color: AppColors.COLOR_PRIMARY,
+            //         size: 40,
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       width: 8,
+            //     ),
+            //     GestureDetector(
+            //       onTap: () async {
+            //         await [Permission.camera, Permission.microphone].request();
+            //         NavigationController.push(
+            //           context,
+            //           CallPage(widget._myUid, ClientRole.Broadcaster),
+            //         );
+            //       },
+            //       child: Icon(
+            //         Icons.video_call,
+            //         color: AppColors.COLOR_PRIMARY,
+            //         size: 40,
+            //       ),
+            //     ),
+            //   ],
             // ),
-            Positioned(
-              top: 9,
-              right: 15,
-              // alignment: Alignment.bottomRight,
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      String message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        var user = await FirebaseFirestore.instance
-                            .collection(AppKeys.PRACTITIONERS)
-                            .doc(widget._myUid)
-                            .get();
-
-                        NotificationsUtills.sendMsgNotification(
-                            sender: widget._myUid,
-                            reciever: widget._patientUid,
-                            title:
-                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
-                            message: message,
-                            body: {
-                              'practitionerUid': widget._myUid,
-                              'type': 'text',
-                            });
-                        _sendMessage(message, 'text');
-                        Others().hideKeyboard(context);
-                      }
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: AppColors.EDIT_PROFILE,
-                      size: 30,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      String message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        var user = await FirebaseFirestore.instance
-                            .collection(AppKeys.PRACTITIONERS)
-                            .doc(widget._myUid)
-                            .get();
-
-                        NotificationsUtills.sendMsgNotification(
-                            sender: widget._myUid,
-                            reciever: widget._patientUid,
-                            title:
-                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
-                            message: message,
-                            body: {
-                              'practitionerUid': widget._myUid,
-                              'type': 'text',
-                            });
-                        _sendMessage(message, 'text');
-                      }
-                    },
-                    child: Icon(
-                      Icons.mood,
-                      color: AppColors.EDIT_PROFILE,
-                      size: 30,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      String message = _messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        var user = await FirebaseFirestore.instance
-                            .collection(AppKeys.PRACTITIONERS)
-                            .doc(widget._myUid)
-                            .get();
-
-                        NotificationsUtills.sendMsgNotification(
-                            sender: widget._myUid,
-                            reciever: widget._patientUid,
-                            title:
-                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
-                            message: message,
-                            body: {
-                              'practitionerUid': widget._myUid,
-                              'type': 'text',
-                            });
-                        _sendMessage(message, 'text');
-                      }
-                    },
-                    child: Icon(
-                      Icons.camera_alt,
-                      color: AppColors.EDIT_PROFILE,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        // child: Row(
-        //   children: [
-        //     Expanded(
-        //       child: TextField(
-        //         controller: _messageController,
-        //         decoration: InputDecoration(
-        //           hintText: 'Message...',
-        //           hintStyle: TextStyle(
-        //             fontSize: 13,
-        //           ),
-        //           contentPadding: EdgeInsets.all(12),
-        //           enabledBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(32),
-        //             borderSide: BorderSide(color: Colors.black26),
-        //           ),
-        //           focusedBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(32),
-        //             borderSide: BorderSide(color: Colors.black38),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //     SizedBox(
-        //       width: 8,
-        //     ),
-        //     GestureDetector(
-        //       onTap: () {
-        //         String message = _messageController.text.trim();
-        //         if (message.isNotEmpty) {
-        //           _sendMessage(message);
-        //         }
-        //       },
-        //       child: Icon(
-        //         Icons.send,
-        //         color: AppColors.COLOR_PRIMARY,
-        //         size: 40,
-        //       ),
-        //     ),
-        //     SizedBox(
-        //       width: 8,
-        //     ),
-        //     GestureDetector(
-        //       onTap: () async {
-        //         await [Permission.camera, Permission.microphone].request();
-        //         NavigationController.push(
-        //           context,
-        //           CallPage(widget._myUid, ClientRole.Broadcaster),
-        //         );
-        //       },
-        //       child: Icon(
-        //         Icons.video_call,
-        //         color: AppColors.COLOR_PRIMARY,
-        //         size: 40,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        //   ),
+            //   ),
+          ),
+        ],
       ),
     );
   }
@@ -1079,4 +1103,53 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
 
     this.onDeleteClicked();
   }
+
+  Future<String> uploadChatImage(BuildContext context, File image) async {
+    String fileName = path.basename(image.path);
+    StorageReference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('Invoice/${widget._myUid}/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
+
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+
+    String url = await firebaseStorageRef.getDownloadURL();
+    return url;
+  }
+
+  Widget _imageMessage(imageUrlFromFB,context,bool check) {
+    return Container(
+      width: 160,
+      height: 160,
+      padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
+      margin: EdgeInsets.only(
+          top: 15,
+          left: check ? 0 : 24,
+          right: check ? 24 : 0,
+          bottom: 15
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: AppColors.COLOR_PRIMARY)
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => FullPhoto(url: imageUrlFromFB)));
+        },
+        child: CachedNetworkImage(
+          imageUrl: imageUrlFromFB,
+          placeholder: (context, url) => Container(
+            transform: Matrix4.translationValues(0, 0, 0),
+            child: Container( width: 60, height: 80,
+                child: Center(child: new CircularProgressIndicator())),
+          ),
+          errorWidget: (context, url, error) => new Icon(Icons.error),
+          width: 60,
+          height: 80,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
 }

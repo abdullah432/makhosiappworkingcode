@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:makhosi_app/main_ui/administration/create_coupons.dart';
+import 'package:makhosi_app/main_ui/administration/done_coupons.dart';
 import 'package:makhosi_app/main_ui/administration/sick_note.dart';
 import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
@@ -22,9 +26,7 @@ class _RequestState extends State<Request> {
     'Discount Given (as %)',
   ];
 
-  bool _obscure1=false;
-  bool _obscure2=false;
-  bool _obscure3=false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,15 +86,14 @@ class _RequestState extends State<Request> {
                     GestureDetector(
                         onTap: (){
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context)=> CreateInvoice()
+                              builder: (context)=> CreateInvoice(serviceCheck: true,)
                           ));
                         },
                         child: containerList('Generate Client Invoices')),
                     GestureDetector(
                         onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context)=> SickNote()
-                          ));
+                          get();
+
                         },
                         child: containerList('Generate Client Sick Note')),
                     GestureDetector(
@@ -103,7 +104,7 @@ class _RequestState extends State<Request> {
                     GestureDetector(
                         onTap: (){
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context)=> CreateQuotation()
+                              builder: (context)=> CreateInvoice(serviceCheck: false,)
                           ));
                         },
                         child: containerList('Create Quotations')),
@@ -113,7 +114,7 @@ class _RequestState extends State<Request> {
                               builder: (context)=> RequestDocument()
                           ));
                         },
-                        child: containerList('Request Tax Documentations')),
+                        child: containerList('Request your business report')),
 
                     Divider(
                       thickness: 1.5,
@@ -245,141 +246,55 @@ class _RequestState extends State<Request> {
     return showDialog(
         context: context,
         builder: (context){
-          return StatefulBuilder(
-            builder: (context,setState){
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))
-                ),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Create Coupons',style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY,fontWeight: FontWeight.w400,fontSize: 24,
-                    ),),
-                    sizeBox(20),
-                    Text('Name of  Client',style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY,fontWeight: FontWeight.w400,fontSize: 12,
-                    ),),
-                    textFiled(_obscure1,(){
-                      setState(() {
-                        _obscure1 = !_obscure1;
-                      });
-                    }),
-                    sizeBox(10),
-                    Text('Email Address',style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY,fontWeight: FontWeight.w400,fontSize: 12,
-                    ),),
-                    textFiled(_obscure2,(){
-                      setState(() {
-                        _obscure2 = !_obscure2;
-                      });
-                    }),
-                    sizeBox(10),
-                    Text('Discount Given (as %)',style: TextStyle(
-                      color: AppColors.COLOR_PRIMARY,fontWeight: FontWeight.w400,fontSize: 12,
-                    ),),
-                    textFiled(_obscure3,(){
-                      setState(() {
-                        _obscure3 = !_obscure3;
-                      });
-                    }),
-                    sizeBox(20),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                       couponDoneDialog();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: AppColors.COLOR_PRIMARY
-                        ),
-                        child: Center(
-                          child: Text('Send Coupon',style: TextStyle(
-                              color: Colors.white,fontWeight: FontWeight.w400,fontSize: 18
-                          ),),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+          return CreateCoupon();
         }
     );
   }
 
-  couponDoneDialog(){
-    showDialog(
-        context: context,
-        builder: (context){
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset('images/administration_images/offer.png',height: 150,),
-                Text('Coupon Created!',style: TextStyle(
-                  color: AppColors.COUPON_TEXT2,fontWeight: FontWeight.w400,fontSize: 20,
-                ),),
-
-                Text('You have successfully created a coupon.',style: TextStyle(
-                  color: AppColors.COUPON_TEXT3,fontWeight: FontWeight.w400,fontSize: 16,
-                ),),
-                sizeBox(25),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.COLOR_PRIMARY
-                    ),
-                    child: Center(
-                      child: Text('OK',style: TextStyle(
-                          color: Colors.white,fontWeight: FontWeight.w400,fontSize: 18
-                      ),),
-                    ),
-                  ),
-                ),
-                sizeBox(20),
-              ],
-            ),
-          );
-        }
-        );
-    }
-
-  Widget textFiled(bool obscure, Function onTap){
-    return TextFormField(
-      initialValue: '●●●●●●●●',
-      obscureText: obscure,
-      decoration: InputDecoration(
-        suffixIcon: GestureDetector(
-          onTap: onTap,
-          child: Icon(
-            !obscure ? Icons.visibility : Icons.visibility_off,
-          ),
-        ),
-        border: InputBorder.none,
-      ),
-    );
-  }
 
   Widget sizeBox(double height){
     return SizedBox(
       height: height,
     );
   }
+
+  get()async{
+    String uid = FirebaseAuth.instance.currentUser.uid;
+    await FirebaseFirestore.instance.collection('service_provider').doc(uid).get().then((value) {
+      print(value.get('service_type'));
+      if(value.get('service_type')== 'Abelaphi'){
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context)=> SickNote()
+      ));
+    }
+      else{
+        dialog3();
+      }
+    }
+      );
+
+  }
+
+  dialog3(){
+    showDialog(context: (context),
+        builder: (context){
+          return AlertDialog(
+            title: Text('Warning'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('You don\'t have the permission')
+              ],
+            ),
+            actions: [
+              FlatButton(onPressed: (){
+                Navigator.pop(context,true);
+              }, child: Text('Ok')),
+            ],
+          );
+        }
+    );
+  }
+
 }
 

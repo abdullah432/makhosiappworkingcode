@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,9 @@ import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 
 class Consultations extends StatefulWidget {
+  final File image;
+
+  Consultations({this.image});
   @override
   _ConsultationsState createState() => _ConsultationsState();
 }
@@ -117,7 +121,7 @@ class _ConsultationsState extends State<Consultations> {
           onTap: () {
             NavigationController.push(
               context,
-              PractitionerChatScreen(model.inBoxSnapshot.id),
+              PractitionerChatScreen(model.inBoxSnapshot.id,image: widget.image,),
             );
           },
           child: Container(
