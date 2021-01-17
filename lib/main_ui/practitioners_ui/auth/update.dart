@@ -294,10 +294,11 @@ class _PatientRegisterScreenState2 extends State<ServiceProviderUpdateScreen>
             .collection('service_provider')
             .doc(_userProfileSnapshot.id)
             .get();
-        NavigationController.pushReplacement(
-          context,
-          PractitionersProfileScreen(false, snapshot),
-        );
+        Navigator.pop(context);
+        // NavigationController.pushReplacement(
+        //   context,
+        //   PractitionersProfileScreen(false, snapshot),
+        // );
       }).catchError((error) {
         setState(() {
           _isLoading = false;

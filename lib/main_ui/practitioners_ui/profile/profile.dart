@@ -1,4 +1,12 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/update.dart';
+import 'package:makhosi_app/ui/ratingstaticpage.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
@@ -18,6 +26,7 @@ import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:makhosi_app/utils/firestore_service.dart';
+import 'package:makhosi_app/utils/others.dart';
 
 class profile2 extends StatefulWidget {
   dynamic snapshot;
@@ -35,7 +44,7 @@ class _profileState extends State<profile2> {
   FirestoreService database = FirestoreService();
 
   dynamic snapshot;
-  bool _isViewer;
+  bool _isViewer = false;
   String firstName = " ";
   String secondName = " ";
   String location = " ";
@@ -46,6 +55,7 @@ class _profileState extends State<profile2> {
   dynamic linkedin = " ";
   dynamic fb = " ";
   dynamic whatsapp = " ";
+  String profilepicture;
   void initState() {
     snapshot = widget.snapshot;
     super.initState();
@@ -63,6 +73,9 @@ class _profileState extends State<profile2> {
     linkedin = snapshot['LinkedInList'];
     fb = snapshot['FbList'];
     whatsapp = snapshot['WhatsappList'];
+    profilepicture = snapshot['id_picture'];
+    print('snapshot');
+    print(snapshot.toString());
   }
 
   @override
@@ -86,23 +99,65 @@ class _profileState extends State<profile2> {
               child: ListView(children: [
                 Card(
                   child: ListTile(
-                      leading: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              "images/circleavater.png",
+                      leading:
+                          // _getImageSection(),
+                          GestureDetector(
+                        onTap: () async {
+                          String uid = FirebaseAuth.instance.currentUser.uid;
+                          PickedFile pickedFile = await ImagePicker().getImage(
+                            source: ImageSource.gallery,
+                            imageQuality: 25,
+                          );
+                          if (pickedFile != null) {
+                            StorageReference ref = FirebaseStorage.instance
+                                .ref()
+                                .child('profile_images/$uid.jpg');
+                            print('ref');
+                            StorageUploadTask task =
+                                ref.putFile(File(pickedFile.path));
+                            print('task');
+                            task.onComplete.then((_) async {
+                              print('before pushing');
+                              await FirebaseFirestore.instance
+                                  .collection('service_provider')
+                                  .doc(uid)
+                                  .set({
+                                'profile_image': await _.ref.getDownloadURL()
+                              }, SetOptions(merge: true));
+                              setState(() {});
+                              // NavigationController.pushReplacement(
+                              //     context,
+                              //     PractitionersProfileScreen(
+                              //         _isViewer,
+                              //         await FirebaseFirestore.instance
+                              //             .collection('service_provider')
+                              //             .doc(uid)
+                              //             .get()));
+                            }).catchError((error) {
+                              print(error);
+                            });
+                          }
+                        },
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: profilepicture != null
+                                  ? CachedNetworkImageProvider(profilepicture)
+                                  : AssetImage(
+                                      "images/circleavater.png",
+                                    ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
-                          ),
-                          border: Border.all(
-                            color: Color(
-                              0xff6043f5,
+                            border: Border.all(
+                              color: Color(
+                                0xff6043f5,
+                              ),
+                              width: 1,
                             ),
-                            width: 1,
+                            shape: BoxShape.circle,
                           ),
-                          shape: BoxShape.circle,
                         ),
                       ),
                       title: Text('${firstName} ${secondName}'),
@@ -126,7 +181,15 @@ class _profileState extends State<profile2> {
                             Icons.star,
                             color: Colors.yellow,
                           ),
-                          Text('4.8 (53)')
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            new RatingInfoPage()));
+                              },
+                              child: Text('4.8 (53)'))
                         ],
                       )),
                 ),
@@ -202,7 +265,23 @@ class _profileState extends State<profile2> {
                     leading: Image.asset('images/ic_reports.png'),
                     title: Text('Reports'),
                     onTap: () {
-                      reportPopupVisibility = true;
+                      setState(() {
+                        reportPopupVisibility = true;
+                      });
+                    },
+                    //trailing: Text('\$2,800')
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    leading: Icon(FlutterIcons.edit_mdi),
+                    title: Text('Edit Profile'),
+                    onTap: () async {
+                      await NavigationController.push(
+                        context,
+                        ServiceProviderUpdateScreen(),
+                      );
+                      setState(() {});
                     },
                     //trailing: Text('\$2,800')
                   ),
@@ -296,8 +375,7 @@ class _profileState extends State<profile2> {
                           //     linkedin,
                           //     fb,
                           //     whatsapp)
-                        BusinessCard()
-                      );
+                          BusinessCard());
                     },
                     leading: Image.asset('images/ic_ads.png'),
                     title: Text('My Business Card'),
@@ -447,5 +525,68 @@ class _profileState extends State<profile2> {
                 )),
           ),
         ]));
+  }
+
+  Widget _getImageSection() {
+    String pic = " ";
+
+    pic = snapshot[AppKeys.ID_PICTURE];
+    return GestureDetector(
+      onTap: !_isViewer
+          ? () async {
+              PickedFile pickedFile = await ImagePicker().getImage(
+                source: ImageSource.gallery,
+                imageQuality: 25,
+              );
+              if (pickedFile != null) {
+                StorageReference ref = FirebaseStorage.instance
+                    .ref()
+                    .child('profile_images/${snapshot.id}.jpg');
+                StorageUploadTask task = ref.putFile(File(pickedFile.path));
+                task.onComplete.then((_) async {
+                  await FirebaseFirestore.instance
+                      .collection('practitioners')
+                      .doc(snapshot.id)
+                      .set({'profile_image': await _.ref.getDownloadURL()},
+                          SetOptions(merge: true));
+                  NavigationController.pushReplacement(
+                      context,
+                      PractitionersProfileScreen(
+                          _isViewer,
+                          await FirebaseFirestore.instance
+                              .collection('service_provider')
+                              .doc(snapshot.id)
+                              .get()));
+                }).catchError((error) {
+                  print(error);
+                });
+              }
+            }
+          : null,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(
+              color: Colors.white,
+              width: 12,
+            ),
+          ),
+          child: snapshot == null
+              ? Others.getProfilePlaceHOlder()
+              : pic == null
+                  ? Others.getProfilePlaceHOlder()
+                  : CircleAvatar(
+                      radius: 18,
+                      backgroundImage: NetworkImage(
+                        pic,
+                      ),
+                    ),
+        ),
+      ),
+    );
   }
 }

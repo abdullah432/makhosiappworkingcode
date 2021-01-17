@@ -328,10 +328,11 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
               .collection('patients')
               .doc(_userProfileSnapshot.id)
               .get();
-          NavigationController.pushReplacement(
-            context,
-            PatientProfileScreen(snapshot, false),
-          );
+          Navigator.pop(context);
+          // NavigationController.pushReplacement(
+          //   context,
+          //   PatientProfileScreen(snapshot, false),
+          // );
         }).catchError((error) {
           setState(() {
             _isLoading = false;

@@ -6,6 +6,7 @@ import 'package:language_pickers/languages.dart';
 import 'package:language_pickers/utils/utils.dart';
 import 'package:makhosi_app/contracts/i_info_dialog_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
+import 'package:makhosi_app/main_ui/patients_ui/auth/update.dart';
 import 'package:makhosi_app/ui_components/circularbutton.dart';
 import 'package:makhosi_app/ui_components/settings/about_page.dart';
 import 'package:makhosi_app/ui_components/settings/help_center.dart';
@@ -64,6 +65,7 @@ class _SettingPageState extends State<SettingPage>
   @override
   void initState() {
     listOfSettingItems = [
+      SettingItem(title: 'Edit Profile', icon: Icons.notifications),
       SettingItem(title: 'Notifications Settings', icon: Icons.notifications),
       SettingItem(title: 'Language', icon: Icons.language),
       SettingItem(title: 'Report a Service Provider', icon: Icons.warning),
@@ -301,19 +303,22 @@ class _SettingPageState extends State<SettingPage>
   onSettingItemClick(int index) {
     switch (index) {
       case 0:
+        NavigationController.push(context, PatientRegisterScreen2());
+        break;
+      case 1:
         setState(() {
           notificationPopupVisibility = true;
         });
         break;
-      case 1:
+      case 2:
         _openLanguagePickerDialog();
         break;
-      case 2:
+      case 3:
         setState(() {
           clientReportVisibility = true;
         });
         break;
-      case 3:
+      case 4:
         setState(() {
           invitationPopupVisibility = true;
         });
@@ -321,15 +326,15 @@ class _SettingPageState extends State<SettingPage>
       // case 4:
       //   NavigationController.push(context, PaymentSettingPage());
       //   break;
-      case 4:
+      case 5:
         NavigationController.push(context, HelpCenterPage());
         break;
-      case 5:
+      case 6:
         setState(() {
           reportPopupVisibility = true;
         });
         break;
-      case 6:
+      case 7:
         NavigationController.push(
           context,
           WebViewPage(
@@ -338,10 +343,10 @@ class _SettingPageState extends State<SettingPage>
           ),
         );
         break;
-      case 7:
+      case 8:
         NavigationController.push(context, AboutPage());
         break;
-      case 8:
+      case 9:
         Others.showInfoDialog(
           context: context,
           title: 'Log Out?',
