@@ -14,7 +14,7 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/secondMain.dart';
 import 'package:makhosi_app/main_ui/administration/admin.dart';
-import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 import '../../../enums/click_type.dart';
 import 'package:makhosi_app/Screens/consultation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -209,9 +209,10 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
             onPressed: () {
               NavigationController.push(
                   context,
-                  BusinessCard2(snapshot['id'], firstName, location, years,
-                      language, service, instagram, linkedin, fb, whatsapp));
-            },
+                  // BusinessCard2(snapshot['id'], firstName, location, years,
+                  //     language, service, instagram, linkedin, fb, whatsapp));
+                  BusinessCard());
+              },
             child: Row(
               children: [
                 Text('BUSINESS INFO',

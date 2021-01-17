@@ -5,7 +5,7 @@ import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profi
 import 'package:makhosi_app/main_ui/administration/admin.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
-import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/setting_page.dart';
@@ -285,17 +285,19 @@ class _profileState extends State<profile2> {
                       print(firstName + location + years + language + service);
                       NavigationController.push(
                           context,
-                          BusinessCard2(
-                              widget.snapshot['id'],
-                              firstName,
-                              location,
-                              years,
-                              language,
-                              service,
-                              instagram,
-                              linkedin,
-                              fb,
-                              whatsapp));
+                          // BusinessCard2(
+                          //     widget.snapshot['id'],
+                          //     firstName,
+                          //     location,
+                          //     years,
+                          //     language,
+                          //     service,
+                          //     instagram,
+                          //     linkedin,
+                          //     fb,
+                          //     whatsapp)
+                        BusinessCard()
+                      );
                     },
                     leading: Image.asset('images/ic_ads.png'),
                     title: Text('My Business Card'),
