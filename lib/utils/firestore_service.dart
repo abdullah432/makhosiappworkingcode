@@ -3,10 +3,54 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
+import 'package:makhosi_app/model/folder.dart';
 
-class FirestoreService {
+class FirestoreService extends ChangeNotifier {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  createFolder(Folders folder) {
+    try {
+      db
+          .collection('service_provider')
+          .doc(auth.currentUser.uid)
+          .collection('folders')
+          .doc()
+          .set(folder.toMap());
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<List<Folders>> fetchFoldersData() async {
+    try {
+      var snapshot = await db
+          .collection('service_provider')
+          .doc(auth.currentUser.uid)
+          .collection('folders')
+          .get();
+
+      final foldersList =
+          snapshot.docs.map((doc) => Folders.fromSnapshot(doc)).toList();
+      return foldersList;
+    } catch (error) {
+      print(error.toString());
+      return [];
+    }
+  }
+
+  updateFolder(Folders folder) async {
+    try {
+      await db
+          .collection('service_provider')
+          .doc(auth.currentUser.uid)
+          .collection('folders')
+          .doc(folder.reference.id)
+          .update(folder.toMap());
+    } catch (error) {
+      print(error.toString());
+    }
+  }
 
   Future<bool> reportUser(
     String serviceProviderName,

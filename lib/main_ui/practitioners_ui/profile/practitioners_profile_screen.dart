@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:makhosi_app/Screens/clients_records.dart';
+import 'package:makhosi_app/Screens/mypersonal_drive.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
@@ -111,6 +113,7 @@ class _PractitionersProfileScreenState
           ]);
     } else if (currentIndex == 1) {
     } else if (currentIndex == 2) {
+      return ClientRecords();
     } else if (currentIndex == 3) {
       return PractitionerBookingsScreen();
     } else if (currentIndex == 4) {

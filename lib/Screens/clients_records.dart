@@ -2,6 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/Assets/app_assets.dart';
 import 'package:makhosi_app/Assets/custom_listtile.dart';
+import 'package:makhosi_app/Screens/folderview.dart';
+import 'package:makhosi_app/Screens/mypersonal_drive.dart';
+import 'package:makhosi_app/model/folder.dart';
+import 'package:makhosi_app/utils/app_dialogues.dart';
+import 'package:makhosi_app/utils/file_picker_service.dart';
+import 'package:makhosi_app/utils/firebasestorageservice.dart';
+import 'package:makhosi_app/utils/firestore_service.dart';
+import 'package:makhosi_app/utils/methods.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:provider/provider.dart';
 
 class ClientRecords extends StatefulWidget {
   @override
@@ -9,6 +19,29 @@ class ClientRecords extends StatefulWidget {
 }
 
 class _ClientRecordsState extends State<ClientRecords> {
+  List<Folders> listOfFolders = [];
+  FirestoreService database = FirestoreService();
+  //
+  // final formKey = GlobalKey<FormState>();
+  final foldernameController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    //load all folders data
+    loadUserFoldersData();
+  }
+
+  @override
+  void dispose() {
+    foldernameController?.dispose();
+    super.dispose();
+  }
+
+  loadUserFoldersData() async {
+    listOfFolders = await database.fetchFoldersData();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +55,22 @@ class _ClientRecordsState extends State<ClientRecords> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image(image: AssetImage('images/ic_back.png')),
-                Image(image: AssetImage('images/ic_popmenu.png')),
+                GestureDetector(
+                    onTap: () {
+                      NavigationController.push(
+                          context,
+                          MyPersonalStorage(
+                            totalUseStorageSize:
+                                Methods.totalFoldersSizedInInt(listOfFolders),
+                          ));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image(image: AssetImage('images/ic_popmenu.png')),
+                    )),
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Row(
@@ -36,7 +80,6 @@ class _ClientRecordsState extends State<ClientRecords> {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: Row(
@@ -46,25 +89,43 @@ class _ClientRecordsState extends State<ClientRecords> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Client Records", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Poppins'),),
+                    Text(
+                      "Client Records",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Poppins'),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 15.0),
-                      child: Text("32 items . 350 Mb", style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Colors.grey, fontFamily: 'Poppins'),),
+                      child: Text(
+                        "${Methods.getItemCount(listOfFolders)} items . ${Methods.totalFoldersSized(listOfFolders)}",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey,
+                            fontFamily: 'Poppins'),
+                      ),
                     ),
                   ],
                 ),
 
-                Image(image: AssetImage('images/ic_search.png'), height: 50,),
-
+                // Image(image: AssetImage('images/ic_search.png'), height: 50,),
               ],
             ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.only(top: 15.0),
-            child: Text("Last update 10 October 2020 .", style: TextStyle(fontSize: 11, fontWeight: FontWeight.normal, color: Colors.grey, fontFamily: 'Poppins'),),
-          ),
-
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 15.0),
+          //   child: Text(
+          //     "Last update 10 October 2020 .",
+          //     style: TextStyle(
+          //         fontSize: 11,
+          //         fontWeight: FontWeight.normal,
+          //         color: Colors.grey,
+          //         fontFamily: 'Poppins'),
+          //   ),
+          // ),
           Stack(
             children: [
               Padding(
@@ -74,34 +135,68 @@ class _ClientRecordsState extends State<ClientRecords> {
                   width: 350,
                   child: Container(
                     color: Colors.white,
-                    child: ListView(
-                      padding: EdgeInsets.all(12),
+                    child: Column(
+                      // padding: EdgeInsets.all(12),
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8, bottom: 20),
+                          padding: const EdgeInsets.all(15.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text("Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
-                              Icon(Icons.arrow_drop_down, color: Colors.grey,),
+                              Text(
+                                "Name",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.grey,
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 180.0),
-                                child: Image(image: AssetImage('images/ic_filter.png')),
+                                child: Image(
+                                    image: AssetImage('images/ic_filter.png')),
                               ),
                             ],
                           ),
                         ),
+                        listOfFolders.length != 0
+                            ? ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: listOfFolders.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      Provider.of<FilePickerService>(context,
+                                              listen: false)
+                                          .clearFilePickItem();
 
-                        items12(title: '20200110-20001', subtitle: '12 items  .  10 Mb',),
+                                      await Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return FolderViewPage(
+                                          folder: listOfFolders[index],
+                                        );
+                                      }));
 
-                        items22(title: '20200110-20011', subtitle: '22 items  . 23 Mb',),
-
-                        items40(title: '20200110-20001', subtitle: '40 items  .  33 Mb',),
-
-                        items6(title: '20200110-20001', subtitle: '6 items  .  5 Mb',),
-
-                        items24(title: '20200110-20001', subtitle: '24 items  .  27 Mb',),
-
+                                      setState(() {});
+                                    },
+                                    child: items12(
+                                      title: listOfFolders[index].foldername,
+                                      subtitle:
+                                          '${listOfFolders[index].listOfFilesUrl.length} items, ${Methods.formatBytes(listOfFolders[index].foldersize)}',
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: Text('No record found'),
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -112,12 +207,27 @@ class _ClientRecordsState extends State<ClientRecords> {
                   right: 15,
                   child: FloatingActionButton(
                     backgroundColor: AppColors.accentcolor,
-                    onPressed: null,
-                    child: Icon(Icons.add, color: Colors.white,),
-                      )),
+                    onPressed: () async {
+                      AppDialogues.showNewFolderPopup(
+                        context,
+                        foldernameController,
+                        onCreateFolder: (foldername) async {
+                          final folder = Folders(foldername, 0, []);
+                          await database.createFolder(folder);
+                          setState(() {
+                            listOfFolders.add(folder);
+                            foldernameController.clear();
+                          });
+                        },
+                      );
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  )),
             ],
           ),
-
         ],
       ),
     );

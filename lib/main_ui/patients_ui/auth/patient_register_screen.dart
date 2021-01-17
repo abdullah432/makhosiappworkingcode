@@ -247,8 +247,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
   void onFieldClicked(FieldType fieldType) async {
     switch (fieldType) {
       case FieldType.DATE:
-        _dateOfBirth =
-            await _dateTimeHelper.openDatePicker(context, _dateOfBirth);
+        _dateOfBirth = await _dateTimeHelper.openDatePicker(context);
         setState(() {});
         break;
     }

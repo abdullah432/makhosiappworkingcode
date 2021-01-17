@@ -103,4 +103,20 @@ E.	Ability to get sick notes and invoices from trusted service providers
     "Xhosa",
     "Tsonga"
   ];
+
+  static const String upgradeStorageTxt =
+      'To add more storage space, you have to upgrade your subscription plan. Or alternatively should you encounter any trouble or difficulties please contact our support team: support@mkhosi.com';
+
+  static const String understandRating =
+      'Ratings allow us to ensure a great a experience with Mkhosi for both the service providers and customers. Both users can rate each other on a scale of 1 – 5 stars after each transaction or consultation.';
+  static const String HOWRATINGCALUCLATEDP1 =
+      'Your rating is an average of the ratings you have received from drivers, and is measured out of 5. Ratings are anonymous, so neither user (service provider or customer) will ever see an individual rating you have received.';
+
+  static const String HOWRATINGCALUCLATEDP2 =
+      'Very few people have a perfect rating, so do not despair if your average is not 5.0. Things that seem small to you can matter to your customer or service provider. Remember, to adhere to good customer – business interactions and integrity.';
+
+  static const String SAFETYTXT =
+      'It is important to build trust whether you are a service provider or customer, and in that always make sure that you do not disclose any important credit information.';
+  static const String WHY_RATING_MATTERS =
+      'Ratings foster mutual respect between riders and driver. This strengthens our community and helps everyone get the most from Mkhosi. A high rating is about more than bragging rights among your colleagues (and friends); it’s a sign that people enjoyed their time with you. Keep up the good work.';
 }
