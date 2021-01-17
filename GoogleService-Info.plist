@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>323450993258-3tnepb03inaonlbcieeboi8bai3gf2q6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.323450993258-3tnepb03inaonlbcieeboi8bai3gf2q6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD0_7sYVieBdBYLdvsx_eFb5v3g6oTSHqk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>323450993258</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.squadtechs.markhor.makhosiApp</string>
+	<key>PROJECT_ID</key>
+	<string>mkhosi-app-f33fd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mkhosi-app-f33fd.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:323450993258:ios:5268fefa3a77e90f7d6813</string>
+	<key>DATABASE_URL</key>
+	<string>https://mkhosi-app-f33fd.firebaseio.com</string>
+</dict>
+</plist>
