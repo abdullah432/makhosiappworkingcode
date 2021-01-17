@@ -21,15 +21,13 @@ import 'package:makhosi_app/utils/firestore_service.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
-import 'package:makhosi_app/Screens/notification_screen.dart';
 
 import 'login_screen.dart';
+
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
 }
-
-
 
 class _SettingPageState extends State<SettingPage>
     implements IInfoDialogClicked {
@@ -53,7 +51,7 @@ class _SettingPageState extends State<SettingPage>
   bool notificationPopupVisibility = false;
   //language picker
   Language _selectedDialogLanguage =
-  LanguagePickerUtils.getLanguageByIsoCode('ko');
+      LanguagePickerUtils.getLanguageByIsoCode('ko');
   //send invitaion
   bool invitationPopupVisibility = false;
   TextEditingController invitationFriendController = TextEditingController();
@@ -68,11 +66,9 @@ class _SettingPageState extends State<SettingPage>
     listOfSettingItems = [
       SettingItem(title: 'Notifications Settings', icon: Icons.notifications),
       SettingItem(title: 'Language', icon: Icons.language),
-      SettingItem(
-          title: 'Report a Service Provider',
-          icon: Icons.warning),
+      SettingItem(title: 'Report a Service Provider', icon: Icons.warning),
       SettingItem(title: 'Invite a friend', icon: Icons.person),
-      SettingItem(title: 'Deactivate Account', icon: Icons.payment),
+      // SettingItem(title: 'Payment Settings', icon: Icons.payment),
       SettingItem(title: 'Help Center', icon: Icons.help_center),
       SettingItem(title: 'Report a Problem', icon: Icons.report_problem),
       SettingItem(title: 'Term and Policies', icon: Icons.policy),
@@ -110,77 +106,45 @@ class _SettingPageState extends State<SettingPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card(
-                      child: ListTile(
-                          leading: Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "images/circleavater.png",
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                              border: Border.all(
-                                color: Color(
-                                  0xff6043f5,
-                                ),
-                                width: 1,
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-
-                          title: Text('Thembi’s Butcher'),
-                          trailing: GestureDetector(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
-                            },
-                            child: Image.asset('images/notification.png', height: 30,width: 30,),
-                          ),
-                          subtitle: Row(
-                            children: [
-                              Icon(Icons.star,color: Colors.yellow,),
-                              Text('4.8 (53)')
-                            ],
-                          )
+                    Text(
+                      'Setting',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.0,
+                        fontFamily: 'Poppins',
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
                     ),
                     Column(
                       children: listOfSettingItems
                           .map((item) => InkWell(
-                        onTap: () => onSettingItemClick(
-                          listOfSettingItems.indexOf(item),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10.0,
-                            bottom: 10.0,
-                          ),
-                          child: Row(
-                            children: [
-                              CircularButton(
-                                icon: item.icon,
-                                iconColor: Colors.white,
-                                color: AppColors.COLOR_PRIMARY,
-                              ),
-                              SizedBox(
-                                width: 15.0,
-                              ),
-                              Text(item.title),
-                              Spacer(),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: AppColors.COLOR_GREY,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ))
+                                onTap: () => onSettingItemClick(
+                                  listOfSettingItems.indexOf(item),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 10.0,
+                                    bottom: 10.0,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      CircularButton(
+                                        icon: item.icon,
+                                        iconColor: Colors.white,
+                                        color: AppColors.COLOR_PRIMARY,
+                                      ),
+                                      SizedBox(
+                                        width: 15.0,
+                                      ),
+                                      Text(item.title),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: AppColors.COLOR_GREY,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ))
                           .toList(),
                     ),
                   ],
@@ -197,9 +161,10 @@ class _SettingPageState extends State<SettingPage>
                     namecontroller: namecontroller,
                     complaincontroller: complaincontroller,
                     isWaiting: isWaiting,
-                    reportTitle:  StringConstants.REPORT_SERVER_PROVIDER,
-                    reportInstruction:  StringConstants.REPORT_SERVER_PROVIDER_INSTRUCTIONS,
-                    nameFieldLabel:  'Name of Service Provider',
+                    reportTitle: StringConstants.REPORT_SERVER_PROVIDER,
+                    reportInstruction:
+                        StringConstants.REPORT_SERVER_PROVIDER_INSTRUCTIONS,
+                    nameFieldLabel: 'Name of Service Provider',
                     complainFieldLabel: 'State the reason for complaint',
                     onOutSideClick: () {
                       setState(() {
@@ -353,18 +318,18 @@ class _SettingPageState extends State<SettingPage>
           invitationPopupVisibility = true;
         });
         break;
+      // case 4:
+      //   NavigationController.push(context, PaymentSettingPage());
+      //   break;
       case 4:
-        //NavigationController.push(context, PaymentSettingPage());
-        break;
-      case 5:
         NavigationController.push(context, HelpCenterPage());
         break;
-      case 6:
+      case 5:
         setState(() {
           reportPopupVisibility = true;
         });
         break;
-      case 7:
+      case 6:
         NavigationController.push(
           context,
           WebViewPage(
@@ -373,14 +338,14 @@ class _SettingPageState extends State<SettingPage>
           ),
         );
         break;
-      case 8:
+      case 7:
         NavigationController.push(context, AboutPage());
         break;
-      case 9:
+      case 8:
         Others.showInfoDialog(
           context: context,
           title: 'Log Out?',
-          message: 'Are youn sure you want to log out of the app?',
+          message: 'Are you sure you want to log out of the app?',
           positiveButtonLabel: 'LOG OUT',
           negativeButtonLabel: 'CANCEL',
           iInfoDialogClicked: this,
@@ -417,31 +382,31 @@ class _SettingPageState extends State<SettingPage>
   //language picker dialog
   // It's sample code of Dialog Item.
   Widget _buildDialogItem(Language language) => Row(
-    children: <Widget>[
-      Text(language.name),
-      SizedBox(width: 8.0),
-      Flexible(child: Text("(${language.isoCode})"))
-    ],
-  );
+        children: <Widget>[
+          Text(language.name),
+          SizedBox(width: 8.0),
+          Flexible(child: Text("(${language.isoCode})"))
+        ],
+      );
 
   void _openLanguagePickerDialog() => showDialog(
-    context: context,
-    builder: (context) => Theme(
-        data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-        child: LanguagePickerDialog(
-          titlePadding: EdgeInsets.all(8.0),
-          searchCursorColor: Colors.pinkAccent,
-          searchInputDecoration: InputDecoration(hintText: 'Search...'),
-          isSearchable: true,
-          title: Text('Select your language'),
-          onValuePicked: (Language language) => setState(() {
-            _selectedDialogLanguage = language;
-            print(_selectedDialogLanguage.name);
-            print(_selectedDialogLanguage.isoCode);
-          }),
-          itemBuilder: _buildDialogItem,
-        )),
-  );
+        context: context,
+        builder: (context) => Theme(
+            data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+            child: LanguagePickerDialog(
+              titlePadding: EdgeInsets.all(8.0),
+              searchCursorColor: Colors.pinkAccent,
+              searchInputDecoration: InputDecoration(hintText: 'Search...'),
+              isSearchable: true,
+              title: Text('Select your language'),
+              onValuePicked: (Language language) => setState(() {
+                _selectedDialogLanguage = language;
+                print(_selectedDialogLanguage.name);
+                print(_selectedDialogLanguage.isoCode);
+              }),
+              itemBuilder: _buildDialogItem,
+            )),
+      );
 
   //onBackpressed: first check if any dialog is visible
   onBackPressed() {

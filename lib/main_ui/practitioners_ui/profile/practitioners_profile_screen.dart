@@ -32,6 +32,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:tabbar/tabbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+
 /*import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +60,8 @@ class PractitionersProfileScreen extends StatefulWidget {
       _PractitionersProfileScreenState();
 }
 
-class _PractitionersProfileScreenState extends State<PractitionersProfileScreen> {
+class _PractitionersProfileScreenState
+    extends State<PractitionersProfileScreen> {
   int currentIndex = 0;
   final controller = PageController();
 
@@ -95,96 +97,72 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
       print(exc);
     }
   }
+
   PageController _pageController;
-  Widget decide()
-  {
-    if(currentIndex==0)
-    {
+  Widget decide() {
+    if (currentIndex == 0) {
       return PageView(
           controller: _pageController,
           onPageChanged: (_index) {
             setState(() => currentIndex = _index);
           },
           children: [
-          AllTab(_snapshot),
-    ]
-      );
-      }
-    else if(currentIndex==1)
-      {
-
-  }
-    else if(currentIndex==2)
-    {
-
-    }
-    else if(currentIndex==3)
-    {
+            AllTab(_snapshot),
+          ]);
+    } else if (currentIndex == 1) {
+    } else if (currentIndex == 2) {
+    } else if (currentIndex == 3) {
       return PractitionerBookingsScreen();
-    }
-    else if(currentIndex==4)
-    {
+    } else if (currentIndex == 4) {
       return Consultations();
     }
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      decide(),
-          bottomNavigationBar: BottomNavyBar(
-          backgroundColor: AppColors.COLOR_PRIMARY,
-          selectedIndex: currentIndex,
-          showElevation: true, // use this to remove appBar's elevation
-          onItemSelected: (_index) => setState(() {
-            currentIndex = _index;
-          }),
-          items: [
-
-            BottomNavyBarItem(
-                icon: Image.asset('images/a.png'),
-                title: Text('Home'),
-                activeColor: Colors.white,
-                inactiveColor: Colors.black
-
-            ),
-
-            BottomNavyBarItem(
-                icon: Image.asset('images/b.png'),
-                title: Text('Earnings'),
-                activeColor: Colors.white,
-                inactiveColor: Colors.black
-
-            ),
-            BottomNavyBarItem(
-                icon: Image.asset('images/c.png'),
-                title: Text('Records'),
-                activeColor: Colors.white,
-               // inactiveColor: Colors.black
-
-            ),
-            BottomNavyBarItem(
-                icon: Image.asset('images/d.png'),
-                title: Text('Appointments'),
-                activeColor: Colors.white,
-               // inactiveColor: Colors.black
-
-            ),
-            BottomNavyBarItem(
-                icon: Image.asset('images/e.png'),
-                title: Text('Inbox'),
-                activeColor: Colors.white,
-               // inactiveColor: Colors.black
-
-            ),
-
-          ],
-        ),
+      body: decide(),
+      bottomNavigationBar: BottomNavyBar(
+        backgroundColor: AppColors.COLOR_PRIMARY,
+        selectedIndex: currentIndex,
+        showElevation: true, // use this to remove appBar's elevation
+        onItemSelected: (_index) => setState(() {
+          currentIndex = _index;
+        }),
+        items: [
+          BottomNavyBarItem(
+              icon: Image.asset('images/a.png'),
+              title: Text('Home'),
+              activeColor: Colors.white,
+              inactiveColor: Colors.black),
+          BottomNavyBarItem(
+              icon: Image.asset('images/b.png'),
+              title: Text('Earnings'),
+              activeColor: Colors.white,
+              inactiveColor: Colors.black),
+          BottomNavyBarItem(
+            icon: Image.asset('images/c.png'),
+            title: Text('Records'),
+            activeColor: Colors.white,
+            // inactiveColor: Colors.black
+          ),
+          BottomNavyBarItem(
+            icon: Image.asset('images/d.png'),
+            title: Text('Appointments'),
+            activeColor: Colors.white,
+            // inactiveColor: Colors.black
+          ),
+          BottomNavyBarItem(
+            icon: Image.asset('images/e.png'),
+            title: Text('Inbox'),
+            activeColor: Colors.white,
+            // inactiveColor: Colors.black
+          ),
+        ],
+      ),
     );
 
-
-      /*  SizedBox(
+    /*  SizedBox(
               height: 0.71,
             ),
             Text(
@@ -270,8 +248,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
       ),
 */
 
-
-      /*Stack(
+    /*Stack(
                   children: [
                     Align(
                       alignment: Alignment.topCenter,
@@ -325,17 +302,18 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                 ),
     );*/
   }
+
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("CANCEL"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
       child: Text("LOG OUT"),
-      onPressed:  () async{
+      onPressed: () async {
         Navigator.pop(context);
         await FirebaseFirestore.instance
             .collection(AppKeys.PRACTITIONERS)
@@ -354,7 +332,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Log Out?"),
-      content: Text("Are youn sure you want to log out of the app?"),
+      content: Text("Are you sure you want to log out of the app?"),
       actions: [
         cancelButton,
         continueButton,
@@ -372,7 +350,6 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
 
   Widget _getBody() {
     return SingleChildScrollView(
-
       padding: EdgeInsets.only(left: 12, right: 12, bottom: 13, top: 25),
       child: Stack(
         children: [
@@ -384,281 +361,281 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
   }
 
   Widget _getContentSection() {
-   // bool isOnline = _snapshot.get(AppKeys.ONLINE);
-    String firstName=" ";
-    String secondName=" ";
-    String location= " ";
+    // bool isOnline = _snapshot.get(AppKeys.ONLINE);
+    String firstName = " ";
+    String secondName = " ";
+    String location = " ";
 
-    firstName=_snapshot[AppKeys.FIRST_NAME];
-    secondName=_snapshot[AppKeys.LAST_NAME];
-    location=_snapshot[AppKeys.ADDRESS];
+    firstName = _snapshot[AppKeys.FIRST_NAME];
+    secondName = _snapshot[AppKeys.LAST_NAME];
+    location = _snapshot[AppKeys.ADDRESS];
 
-    if(firstName==null){firstName=" ";};
-    if(secondName==null){secondName=" ";};
-    if(location==null){location=" ";};
+    if (firstName == null) {
+      firstName = " ";
+    }
+    ;
+    if (secondName == null) {
+      secondName = " ";
+    }
+    ;
+    if (location == null) {
+      location = " ";
+    }
+    ;
     return Column(
       children: [
-      Card(
-      elevation: 5,
-      margin: EdgeInsets.only(top: 50),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(12),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 32,
-
-                  ),
-                  Row(
+        Card(
+          elevation: 5,
+          margin: EdgeInsets.only(top: 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
                       SizedBox(
-                        width: 89,
+                        height: 32,
                       ),
-                    Text(
-                        '${firstName}${secondName}',
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 89,
+                          ),
+                          Text(
+                            '${firstName}${secondName}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 21,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Container(
+                            height: 15,
+                            width: 18,
+                            child: Image.asset(
+                              "images/Vector.png",
+                              height: 12,
+                              width: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${location}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 21,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Colors.black87,
                         ),
-
-                    ),
-
-                      Container(
-                        height: 15,
-                        width: 18,
-                        child: Image.asset("images/Vector.png", height: 12,width: 12,),
                       ),
-                    ],
-
-                  ),
-                  Text(
-                    '${location}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+                      Others.getSizedBox(boxHeight: 8, boxWidth: 0),
 //                  _getRattingBar(),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                '0',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.black,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'N0. OF CLIENTS',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 10, right: 10),
+                            height: 45,
+                            width: 2,
+                            color: Colors.black38,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '0',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.black,
+                                  //  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'NO. OF RATINGS',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 10, right: 10),
+                            height: 45,
+                            width: 2,
+                            color: Colors.black38,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '2000',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.black,
+                                  //fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'TOTAL EARNINGS (ZAR)',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      FlatButton(
+                        height: 60,
+                        minWidth: 210,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        color: AppColors.COLOR_PRIMARY,
+                        onPressed: () {
+                          //NavigationController.push(
+                          //context,
+                          //BLogHomeScreen(_snapshot.id, true),
+                          //);
+                        },
+                        child: Text(
+                          'EDIT PROFILE',
+                          style: TextStyle(color: Colors.white, fontSize: 22),
+                        ),
+                      ),
+
+                      // _getNamesSection(),
+                      // widget._isViewer ? Container() : PractitionerHomeButtons(),
+                      // SizedBox(
+                      // height: 16,
+                      //),
+                      // Text(
+                      //   'Timing',
+                      //   style: TextStyle(
+                      //     fontWeight: FontWeight.bold,
+                      //     fontSize: 15,
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      // _getTimingSection(),
+                      // SizedBox(
+                      // height: 16,
+                      //),
+                      // _getButtonsSection(),
+                    ],
+                  ),
+                ),
+              ),
+              widget._isViewer
+                  ? Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          color: _isFavorite ? Colors.red : Colors.grey,
+                        ),
+                        onPressed: () {
+                          _saveFavorite();
+                        },
+                      ),
+                    )
+                  : Container(),
+              !widget._isViewer
+                  ? Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        width: 45,
+                        height: 45,
+                        margin: EdgeInsets.all(8),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: GestureDetector(
+                                child: Image.asset('images/setting.png'),
+                                onTap: () {
+                                  NavigationController.push(
+                                    context,
+                                    SettingPage(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: 45,
+                  height: 45,
+                  margin: EdgeInsets.all(8),
+                  child: Stack(
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            '0',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.black,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'N0. OF CLIENTS',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        height: 45,
-                        width: 2,
-                        color: Colors.black38,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '0',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.black,
-                              //  fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'NO. OF RATINGS',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        height: 45,
-                        width: 2,
-                        color: Colors.black38,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '2000',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.black,
-                              //fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'TOTAL EARNINGS (ZAR)',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: GestureDetector(
+                          child: Image.asset('images/notification.png'),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        new NotificationScreen()));
+                          },
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  FlatButton(
-                    height: 60,
-                    minWidth:210,
-
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                    color: AppColors.COLOR_PRIMARY,
-                    onPressed: () {
-                      //NavigationController.push(
-                      //context,
-                      //BLogHomeScreen(_snapshot.id, true),
-                      //);
-                    },
-                    child: Text(
-                      'EDIT PROFILE',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22
-                      ),
-                    ),
-                  ),
-
-                  // _getNamesSection(),
-                  // widget._isViewer ? Container() : PractitionerHomeButtons(),
-                  // SizedBox(
-                  // height: 16,
-                  //),
-                  // Text(
-                  //   'Timing',
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: 15,
-                  //   ),
-                  // ),
-                  SizedBox(
-                    height: 7,
-                  ),
-                  // _getTimingSection(),
-                  // SizedBox(
-                  // height: 16,
-                  //),
-                  // _getButtonsSection(),
-                ],
-              ),
-            ),
+                ),
+              )
+            ],
           ),
-           widget._isViewer
-              ? Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.favorite,
-                      color: _isFavorite ? Colors.red : Colors.grey,
-                    ),
-                    onPressed: () {
-                      _saveFavorite();
-                    },
-                  ),
-                )
-              : Container(),
-          !widget._isViewer
-              ? Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 45,
-                    height: 45,
-                    margin: EdgeInsets.all(8),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            child: Image.asset(
-                              'images/setting.png'
-                            ),
-                            onTap: () {
-                              NavigationController.push(
-                                context,
-                                SettingPage(),
-                              );
-                            },
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                )
-              : Container(),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              width: 45,
-              height: 45,
-              margin: EdgeInsets.all(8),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: GestureDetector(
-                      child: Image.asset(
-                        'images/notification.png'
-                      ),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
-
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    ),
-         widget._isViewer ? Container() : PractitionerHomeButtons(_snapshot),
-
-
+        ),
+        widget._isViewer ? Container() : PractitionerHomeButtons(_snapshot),
       ],
     );
-
   }
 
   Widget _getButtonsSection() {
@@ -715,7 +692,6 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
   }
 
   Widget _getBookingButton() {
-
     return Expanded(
       child: FlatButton(
         shape: RoundedRectangleBorder(
@@ -933,10 +909,9 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
   }
 
   Widget _getImageSection() {
-    String pic= " ";
+    String pic = " ";
 
-
-    pic=_snapshot[AppKeys.ID_PICTURE];
+    pic = _snapshot[AppKeys.ID_PICTURE];
     return GestureDetector(
       onTap: !widget._isViewer
           ? () async {

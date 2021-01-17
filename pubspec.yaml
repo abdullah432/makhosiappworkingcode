@@ -96,7 +96,7 @@ dev_dependencies:
     sdk: flutter
 
 dependency_overrides:
-#  intl: ^0.17.0-nullsafety.2
+ intl: ^0.17.0-nullsafety.2
 
 flutter_icons:
   android: "launcher_icon"

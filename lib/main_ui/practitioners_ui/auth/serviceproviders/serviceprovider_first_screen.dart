@@ -136,6 +136,7 @@ class _PractitionerRegisterScreenSecondState
             label: 'Company Registration No. (If available)',
             isPassword: false,
             isNumber: false,
+            isOptional: true,
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           //location dropdown
@@ -194,7 +195,7 @@ class _PractitionerRegisterScreenSecondState
               onChanged: (item) {
                 setState(() {
                   _selectedServiceType = item;
-                  ServiceProviderRegisterScreenOne.checkservice=item;
+                  ServiceProviderRegisterScreenOne.checkservice = item;
                 });
               },
             ),
@@ -205,28 +206,27 @@ class _PractitionerRegisterScreenSecondState
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black12),
             ),
-            child:
-          DropdownButton(
-            hint: Text('Select Sub Service'),
-            isExpanded: true,
-            underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
-            value: _seub_service,
-            items: _serviceTypeList
-                .map(
-                  (item) => DropdownMenuItem(
-                child: Text(item),
-                value: item,
-              ),
-            )
-                .toList(),
-            onChanged: (item) {
-              setState(() {
-                _seub_service = item;
-                //ServiceProviderRegisterScreenOne.checkservice=item;
-              });
-            },
+            child: DropdownButton(
+              hint: Text('Select Sub Service'),
+              isExpanded: true,
+              underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+              value: _seub_service,
+              items: _serviceTypeList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    ),
+                  )
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  _seub_service = item;
+                  //ServiceProviderRegisterScreenOne.checkservice=item;
+                });
+              },
+            ),
           ),
-    ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppTextFields.getMultiLineRegisterField(
             controller: _briefDescriptionController,

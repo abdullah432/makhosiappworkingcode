@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:makhosi_app/main_ui/patients_ui/auth/update.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:makhosi_app/tabs/near2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +27,8 @@ import 'package:makhosi_app/thirdMain.dart';
 import 'package:makhosi_app/main_ui/general_ui/settingpage2.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_inbox_screen.dart';
-import 'package:makhosi_app/main_ui/patients_ui/auth/update.dart';
+import 'package:makhosi_app/main_ui/patients_ui/auth/patient_register_screen.dart';
+
 class PatientProfileScreen extends StatefulWidget {
   DocumentSnapshot _snapshot;
   bool _isViewer;
@@ -44,20 +46,18 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
         IDialogueButtonClicked {
   bool _isLoading = false;
   String _uid;
-  var seen=0;
+  var seen = 0;
   void finished() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-     seen=prefs.getInt('count');
+    seen = prefs.getInt('count');
   }
+
   @override
   Widget build(BuildContext context) {
     finished();
     return Scaffold(
-
       body: Stack(
         children: [
-
-
           Align(
             alignment: Alignment.topCenter,
             child: Image.asset(
@@ -67,8 +67,6 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
               fit: BoxFit.cover,
             ),
           ),
-
-
           SingleChildScrollView(
             child: Column(
               children: [
@@ -83,42 +81,38 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
           Container(
               height: 50,
               width: 50,
-              margin: EdgeInsets.only(left: 314,top: 600),
-
+              margin: EdgeInsets.only(left: 314, top: 600),
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   showAlertDialog(context);
                 },
                 child: Image.asset('images/logout.png'),
-              )
-          ),
+              )),
           Align(
             alignment: Alignment(-0.86, -0.88),
-            child:  GestureDetector(
-              onTap: (){
+            child: GestureDetector(
+              onTap: () {
                 Navigator.of(context).pop();
               },
-              child: Image.asset(
-                  'images/back_ar.png'
-              ),
-
+              child: Image.asset('images/back_ar.png'),
             ),
           ),
         ],
       ),
     );
   }
+
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("CANCEL"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
       child: Text("LOG OUT"),
-      onPressed:  () async{
+      onPressed: () async {
         Navigator.pop(context);
         await FirebaseFirestore.instance
             .collection('patients')
@@ -137,7 +131,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Log Out?"),
-      content: Text("Are youn sure you want to log out of the app?"),
+      content: Text("Are you sure you want to log out of the app?"),
       actions: [
         cancelButton,
         continueButton,
@@ -152,7 +146,6 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
       },
     );
   }
-
 
   Widget _getContentSection() {
     return Container(
@@ -173,310 +166,299 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                   child: Padding(
                     padding: EdgeInsets.all(16),
                     child: SingleChildScrollView(
-                      child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 26,
-                        ),
-                        Text(
-                          widget._snapshot.get(AppKeys.FULL_NAME),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 21,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 26,
                           ),
-                        ),
-                        Text(
-                          widget._snapshot.get(AppKeys.ADDRESS),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  '0',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: Colors.black,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'SERVICES\n LIKED',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 16, right: 16),
-                              height: 45,
-                              width: 2,
-                              color: Colors.black38,
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  '2.5',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: Colors.black,
-                                    //  fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'CUSTOMER\n RATING',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 16, right: 16),
-                              height: 45,
-                              width: 2,
-                              color: Colors.black38,
-                            ),
-                            Column(
-                              children: [
-                                seen!=null?
-                                Text(
-                                  '$seen',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: Colors.black,
-                                    //fontWeight: FontWeight.bold,
-                                  ),
-                                ):Text(
-                                  '0',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: Colors.black,
-                                    //fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'POINTS',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        !widget._isViewer
-                            ? FlatButton(
-                          height: 40,
-                          minWidth:170,
-
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          color: AppColors.COLOR_PRIMARY,
-                          onPressed: () {
-                            NavigationController.pushReplacement(
-                              context,
-                              PatientRegisterScreen2(),
-                            );
-                            //NavigationController.push(
-                            //context,
-                            //BLogHomeScreen(_snapshot.id, true),
-                            //);
-                          },
-                          child: Text(
-                            'EDIT PROFILE',
+                          Text(
+                            widget._snapshot.get(AppKeys.FULL_NAME),
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22
+                              fontSize: 21,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        )
-                            : Container(),
-                      ],
+                          Text(
+                            widget._snapshot.get(AppKeys.ADDRESS),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    '0',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: Colors.black,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'SERVICES\n LIKED',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 16, right: 16),
+                                height: 45,
+                                width: 2,
+                                color: Colors.black38,
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    '2.5',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: Colors.black,
+                                      //  fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'CUSTOMER\n RATING',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 16, right: 16),
+                                height: 45,
+                                width: 2,
+                                color: Colors.black38,
+                              ),
+                              Column(
+                                children: [
+                                  seen != null
+                                      ? Text(
+                                          '$seen',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 21,
+                                            color: Colors.black,
+                                            //fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : Text(
+                                          '0',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 21,
+                                            color: Colors.black,
+                                            //fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                  Text(
+                                    'POINTS',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          !widget._isViewer
+                              ? FlatButton(
+                                  height: 40,
+                                  minWidth: 170,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(32),
+                                  ),
+                                  color: AppColors.COLOR_PRIMARY,
+                                  onPressed: () {
+                                    NavigationController.pushReplacement(
+                                      context,
+                                      PatientRegisterScreen2(),
+                                    );
+                                    //NavigationController.push(
+                                    //context,
+                                    //BLogHomeScreen(_snapshot.id, true),
+                                    //);
+                                  },
+                                  child: Text(
+                                    'EDIT PROFILE',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 22),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                  ),
               ),
               SizedBox(
                 height: 10,
               ),
-              !widget._isViewer ? Column(
-    children: [
-    Container(
-    margin: EdgeInsets.only(left: 35, right: 35, top: 5),
-    child: FlatButton(
-    height: 45,
-    //minWidth: 50,
-      onPressed:(){
-        NavigationController.push(
-          context,
-          app(),
-        );
-      },
-    child: Row(
-    children: [
-    Text('MKHOSI KNOWLEDGE HUB', style: TextStyle(
-    color: AppColors.COLOR_PRIMARY
-    )
-    ),
-    SizedBox(
-    width: 20,
-    ),
-      Image.asset(
-        'images/arrow.png',
-      )
-
-    ],
-    ),
-    textColor: Colors.white,
-    shape: RoundedRectangleBorder(side: BorderSide(
-    color: AppColors.COLOR_PRIMARY,
-    width: 1,
-    style: BorderStyle.solid
-    ), borderRadius: BorderRadius.circular(50)),
-    ),
-    ),
-
-
-    Container(
-    margin: EdgeInsets.only(left: 35, right: 35, top: 8),
-    child: FlatButton(
-    height: 45,
-    //minWidth: 50,
-    onPressed: (){
-      NavigationController.push(
-        context,
-        NearbyPractitionersTab2(),
-      );
-    },
-    child: Row(
-    children: [
-    Text('FIND A SERVICE', style: TextStyle(
-    color: AppColors.COLOR_PRIMARY,
-
-    )
-    ),
-
-    SizedBox(
-    width: 82,
-    ),
-      Image.asset(
-        'images/arrow.png',
-      )
-
-    ],
-    ),
-    textColor: Colors.white,
-    shape: RoundedRectangleBorder(side: BorderSide(
-    color: AppColors.COLOR_PRIMARY,
-    width: 1,
-    style: BorderStyle.solid,
-    ), borderRadius: BorderRadius.circular(50)),
-    ),
-    ),
-
-    Container(
-    margin: EdgeInsets.only(left: 35, right: 35, top: 8),
-    child: FlatButton(
-    height: 45,
-    //minWidth: 50,
-    onPressed: (){
-      NavigationController.push(
-        context,
-        PractitionerInboxScreen(),
-      );
-    },
-    child: Row(
-    children: [
-    Text('MESSAGES', style: TextStyle(
-    color: AppColors.COLOR_PRIMARY,
-
-    )
-    ),
-
-    SizedBox(
-    width: 101,
-    ),
-      Image.asset(
-        'images/arrow.png',
-      )
-
-    ],
-    ),
-    textColor: Colors.white,
-    shape: RoundedRectangleBorder(side: BorderSide(
-    color: AppColors.COLOR_PRIMARY,
-    width: 1,
-    style: BorderStyle.solid,
-    ), borderRadius: BorderRadius.circular(50)),
-    ),
-    ),
-    ],
-    ) : Container(),
+              !widget._isViewer
+                  ? Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 35, right: 35, top: 5),
+                          child: FlatButton(
+                            height: 45,
+                            //minWidth: 50,
+                            onPressed: () {
+                              NavigationController.push(
+                                context,
+                                app(),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Text('MKHOSI KNOWLEDGE HUB',
+                                    style: TextStyle(
+                                        color: AppColors.COLOR_PRIMARY)),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Image.asset(
+                                  'images/arrow.png',
+                                )
+                              ],
+                            ),
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: AppColors.COLOR_PRIMARY,
+                                    width: 1,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(50)),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 35, right: 35, top: 8),
+                          child: FlatButton(
+                            height: 45,
+                            //minWidth: 50,
+                            onPressed: () {
+                              NavigationController.push(
+                                context,
+                                NearbyPractitionersTab2(),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Text('FIND A SERVICE',
+                                    style: TextStyle(
+                                      color: AppColors.COLOR_PRIMARY,
+                                    )),
+                                SizedBox(
+                                  width: 82,
+                                ),
+                                Image.asset(
+                                  'images/arrow.png',
+                                )
+                              ],
+                            ),
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: AppColors.COLOR_PRIMARY,
+                                  width: 1,
+                                  style: BorderStyle.solid,
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 35, right: 35, top: 8),
+                          child: FlatButton(
+                            height: 45,
+                            //minWidth: 50,
+                            onPressed: () {
+                              NavigationController.push(
+                                context,
+                                PractitionerInboxScreen(),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Text('MESSAGES',
+                                    style: TextStyle(
+                                      color: AppColors.COLOR_PRIMARY,
+                                    )),
+                                SizedBox(
+                                  width: 101,
+                                ),
+                                Image.asset(
+                                  'images/arrow.png',
+                                )
+                              ],
+                            ),
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: AppColors.COLOR_PRIMARY,
+                                  width: 1,
+                                  style: BorderStyle.solid,
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
           !widget._isViewer
               ? Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              width: 45,
-              height: 45,
-              margin: EdgeInsets.only(right: 15, top: 50),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: GestureDetector(
-                      child: Image.asset(
-                          'images/setting.png'
-                      ),
-                      onTap: () {
-                        NavigationController.push(
-                          context,
-                          SettingPage(),
-                        );
-
-                      },
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    margin: EdgeInsets.only(right: 15, top: 50),
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: GestureDetector(
+                            child: Image.asset('images/setting.png'),
+                            onTap: () {
+                              NavigationController.push(
+                                context,
+                                SettingPage(),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-
-                ],
-              ),
-            ),
-          )
+                )
               : Container(),
           Align(
             alignment: Alignment.bottomLeft,
@@ -489,12 +471,13 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: GestureDetector(
-                      child: Image.asset(
-                     'images/notification.png'
-                      ),
+                      child: Image.asset('images/notification.png'),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    new NotificationScreen()));
                       },
                     ),
                   ),
@@ -503,7 +486,6 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
             ),
           ),
           _getImageSection(),
-
         ],
       ),
     );
@@ -515,7 +497,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
       child: Container(
         width: 100,
         height: 100,
-        margin: EdgeInsets.only(bottom: 600) ,
+        margin: EdgeInsets.only(bottom: 600),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           border: Border.all(
@@ -526,9 +508,11 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
         child: Stack(
           children: [
             GestureDetector(
-              onTap: !widget._isViewer ? () {
-                _openGallery();
-              } : null,
+              onTap: !widget._isViewer
+                  ? () {
+                      _openGallery();
+                    }
+                  : null,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 50,

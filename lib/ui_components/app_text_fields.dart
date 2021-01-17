@@ -20,7 +20,6 @@ class AppTextFields {
       obscureText: isPassword,
       style: TextStyle(
         color: Colors.grey,
-
       ),
       decoration: InputDecoration(
           filled: true,
@@ -73,13 +72,12 @@ class AppTextFields {
             width: 1.5,
           ),
         ),
-        labelText: label,
+        hintText: label,
         labelStyle: TextStyle(
           color: Colors.grey,
         ),
         hintMaxLines: 3,
       ),
-
     );
   }
 
@@ -88,19 +86,18 @@ class AppTextFields {
     @required String label,
     @required bool isPassword,
     @required bool isNumber,
+    bool isOptional: false,
   }) {
     return TextFormField(
-
       controller: controller,
       validator: (value) {
-        if (value.isEmpty) return "This field can't be empty";
+        if (value.isEmpty && !isOptional) return "This field can't be empty";
         return null;
       },
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       obscureText: isPassword,
       style: TextStyle(
         color: Colors.grey,
-
       ),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(16),
@@ -118,11 +115,7 @@ class AppTextFields {
         ),
         hintText: label,
         hintMaxLines: 2,
-        hintStyle: TextStyle(
-          color: Colors.grey,
-          fontSize: 12
-        ),
-
+        hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
       ),
     );
   }

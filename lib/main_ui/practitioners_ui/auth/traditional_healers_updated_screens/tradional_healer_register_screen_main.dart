@@ -19,7 +19,7 @@ class _OnBoardingOneState extends State<OnBoardingOne> {
           ),
           Center(
             child: Image.asset(
-              "images/boarding.png",
+              "images/splash_app_logo.png",
               height: 200,
               width: 250,
             ),

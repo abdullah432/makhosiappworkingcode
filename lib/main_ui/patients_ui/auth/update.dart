@@ -28,7 +28,6 @@ import 'package:geocoder/geocoder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PatientRegisterScreen2 extends StatefulWidget {
-
   @override
   _PatientRegisterScreenState2 createState() => _PatientRegisterScreenState2();
 }
@@ -57,7 +56,6 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
   DocumentSnapshot _userProfileSnapshot;
   String _uid;
 
-
   @override
   void initState() {
     _getUserProfileData();
@@ -66,6 +64,7 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
     _location = Location();
     _checkLocationPermissions();
   }
+
   Future<void> _checkLocationPermissions() async {
     _permissionStatus = await _location.hasPermission();
     if (_permissionStatus == PermissionStatus.denied)
@@ -76,30 +75,37 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
     }
     _getUserLocation();
   }
+
   Future<void> _getUserLocation() async {
     LocationData locationData = await _location.getLocation();
     _userCoordinates =
         Coordinates(locationData.latitude, locationData.longitude);
     _getUserAddress();
   }
+
   Future<void> _getUserAddress() async {
     List<Address> addressList =
-    await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
+        await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
     if (addressList.isNotEmpty) {
       _addressController.text = addressList[0].addressLine;
       //_userCity = addressList[0].subAdminArea;
     }
   }
+
   Future<void> _getUserProfileData() async {
     _uid = FirebaseAuth.instance.currentUser.uid;
     _userProfileSnapshot =
-    await FirebaseFirestore.instance.collection('patients').doc(_uid).get();
+        await FirebaseFirestore.instance.collection('patients').doc(_uid).get();
     setState(() {
       _nameController.text = _userProfileSnapshot.get(AppKeys.FULL_NAME);
-      _phoneNumberController.text = _userProfileSnapshot.get(AppKeys.PHONE_NUMBER);
+      _phoneNumberController.text =
+          _userProfileSnapshot.get(AppKeys.PHONE_NUMBER);
       _addressController.text = _userProfileSnapshot.get(AppKeys.ADDRESS);
+      _selectedGender = _userProfileSnapshot.get(AppKeys.GENDER);
+      _dateOfBirth = _userProfileSnapshot.get(AppKeys.DATE_OF_BIRTH);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -113,7 +119,6 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
           ],
         ),
       ),
-
     );
   }
 
@@ -137,23 +142,23 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
         ),
         Others.getSizedBox(
             boxHeight: _userProfileSnapshot == null ? 16 : 0, boxWidth: 0),
-        _userProfileSnapshot== null
+        _userProfileSnapshot == null
             ? AppTextFields.getTextField(
-          controller: _emailController,
-          label: 'Email',
-          isPassword: false,
-          isNumber: false,
-        )
+                controller: _emailController,
+                label: 'Email',
+                isPassword: false,
+                isNumber: false,
+              )
             : Container(),
         Others.getSizedBox(
             boxHeight: _userProfileSnapshot == null ? 16 : 0, boxWidth: 0),
         _userProfileSnapshot == null
             ? AppTextFields.getTextField(
-          controller: _passwordController,
-          label: 'Password',
-          isPassword: true,
-          isNumber: false,
-        )
+                controller: _passwordController,
+                label: 'Password',
+                isPassword: true,
+                isNumber: false,
+              )
             : Container(),
         Others.getSizedBox(boxHeight: 16, boxWidth: 0),
         AppTextFields.getTextField(
@@ -169,30 +174,24 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
           isPassword: false,
           isNumber: false,
         ),
-        Others.getSizedBox(
-            boxHeight: _userProfileSnapshot == null ? 16 : 0, boxWidth: 0),
-        _userProfileSnapshot == null
-            ? AppDropDowns.getBorderedStringDropDown(
+        Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+        AppDropDowns.getBorderedStringDropDown(
           this,
           _selectedGender,
           _genderList,
-        )
-            : Container(),
-        Others.getSizedBox(
-            boxHeight: _userProfileSnapshot== null ? 16 : 0, boxWidth: 0),
-        _userProfileSnapshot == null
-            ? AppClickableFields.getBorderedClickableField(
+        ),
+        Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+        AppClickableFields.getBorderedClickableField(
           _dateOfBirth,
           FieldType.DATE,
           this,
           Icons.calendar_today,
-        )
-            : Container(),
+        ),
         Others.getSizedBox(boxHeight: 32, boxWidth: 0),
         AppButtons.getRoundedButton(
           context: context,
           iRoundedButtonClicked: this,
-          label: _userProfileSnapshot== null ? 'SIGN UP' : 'SAVE',
+          label: _userProfileSnapshot == null ? 'SIGN UP' : 'SAVE',
           clickType: ClickType.DUMMY,
         ),
       ],
@@ -218,7 +217,8 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
           ),
           Others.getSizedBox(boxHeight: 0, boxWidth: 8),
           AppLabels.getLabel(
-            labelText:_userProfileSnapshot == null ? 'CUSTOMER' : 'EDIT PROFILE',
+            labelText:
+                _userProfileSnapshot == null ? 'CUSTOMER' : 'EDIT PROFILE',
             size: 21,
             labelColor: Colors.black,
             isBold: false,
@@ -241,7 +241,8 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
   void onFieldClicked(FieldType fieldType) async {
     switch (fieldType) {
       case FieldType.DATE:
-        _dateOfBirth = await _dateTimeHelper.openDatePicker(context);
+        _dateOfBirth =
+            await _dateTimeHelper.openDatePicker(context, _dateOfBirth);
         setState(() {});
         break;
     }
@@ -254,7 +255,9 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
     String password = _passwordController.text.trim();
     String address = _addressController.text.trim();
     String phoneNumber = _phoneNumberController.text.trim();
-    if (_userProfileSnapshot== null) {
+    String dateOfBirth = _dateOfBirth;
+    String gender = _selectedGender;
+    if (_userProfileSnapshot == null) {
       bool isValidUser = _registerHelper.validateUser(
         name: name,
         email: email,
@@ -317,6 +320,8 @@ class _PatientRegisterScreenState2 extends State<PatientRegisterScreen2>
             AppKeys.FULL_NAME: name,
             AppKeys.ADDRESS: address,
             AppKeys.PHONE_NUMBER: phoneNumber,
+            AppKeys.DATE_OF_BIRTH: dateOfBirth,
+            AppKeys.GENDER: gender,
           },
         ).then((_) async {
           var snapshot = await FirebaseFirestore.instance

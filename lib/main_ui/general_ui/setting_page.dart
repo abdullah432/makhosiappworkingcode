@@ -23,12 +23,11 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'login_screen.dart';
+
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
 }
-
-
 
 class _SettingPageState extends State<SettingPage>
     implements IInfoDialogClicked {
@@ -67,9 +66,7 @@ class _SettingPageState extends State<SettingPage>
     listOfSettingItems = [
       SettingItem(title: 'Notifications Settings', icon: Icons.notifications),
       SettingItem(title: 'Language', icon: Icons.language),
-      SettingItem(
-          title:  'Report a Client',
-          icon: Icons.warning),
+      SettingItem(title: 'Report a Client', icon: Icons.warning),
       SettingItem(title: 'Invite a friend', icon: Icons.person),
       SettingItem(title: 'Payment Settings', icon: Icons.payment),
       SettingItem(title: 'Help Center', icon: Icons.help_center),
@@ -164,10 +161,10 @@ class _SettingPageState extends State<SettingPage>
                     namecontroller: namecontroller,
                     complaincontroller: complaincontroller,
                     isWaiting: isWaiting,
-                    reportTitle:  StringConstants.REPORT_CLIENT,
-                    reportInstruction: StringConstants.REPORT_CLIENT_INSTRUCTIONS,
-                    nameFieldLabel:  'Name of customer/client',
-
+                    reportTitle: StringConstants.REPORT_CLIENT,
+                    reportInstruction:
+                        StringConstants.REPORT_CLIENT_INSTRUCTIONS,
+                    nameFieldLabel: 'Name of customer/client',
                     complainFieldLabel: 'State the reason for complaint',
                     onOutSideClick: () {
                       setState(() {
@@ -348,7 +345,7 @@ class _SettingPageState extends State<SettingPage>
         Others.showInfoDialog(
           context: context,
           title: 'Log Out?',
-          message: 'Are youn sure you want to log out of the app?',
+          message: 'Are you sure you want to log out of the app?',
           positiveButtonLabel: 'LOG OUT',
           negativeButtonLabel: 'CANCEL',
           iInfoDialogClicked: this,

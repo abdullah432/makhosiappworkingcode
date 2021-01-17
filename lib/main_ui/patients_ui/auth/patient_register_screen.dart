@@ -26,7 +26,6 @@ import 'package:makhosi_app/utils/string_constants.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 
-
 class PatientRegisterScreen extends StatefulWidget {
   ClickType _userType;
   DocumentSnapshot _snapshot;
@@ -59,7 +58,6 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
   Coordinates _userCoordinates;
   PermissionStatus _permissionStatus;
 
-
   @override
   void initState() {
     if (widget._snapshot != null) {
@@ -68,9 +66,10 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
       _addressController.text = widget._snapshot.get(AppKeys.ADDRESS);
     }
     super.initState();
-      _location = Location();
-      _checkLocationPermissions();
+    _location = Location();
+    _checkLocationPermissions();
   }
+
   Future<void> _checkLocationPermissions() async {
     _permissionStatus = await _location.hasPermission();
     if (_permissionStatus == PermissionStatus.denied)
@@ -81,20 +80,23 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
     }
     _getUserLocation();
   }
+
   Future<void> _getUserLocation() async {
     LocationData locationData = await _location.getLocation();
     _userCoordinates =
         Coordinates(locationData.latitude, locationData.longitude);
     _getUserAddress();
   }
+
   Future<void> _getUserAddress() async {
     List<Address> addressList =
-    await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
+        await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
     if (addressList.isNotEmpty) {
       _addressController.text = addressList[0].addressLine;
       //_userCity = addressList[0].subAdminArea;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -245,7 +247,8 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
   void onFieldClicked(FieldType fieldType) async {
     switch (fieldType) {
       case FieldType.DATE:
-        _dateOfBirth = await _dateTimeHelper.openDatePicker(context);
+        _dateOfBirth =
+            await _dateTimeHelper.openDatePicker(context, _dateOfBirth);
         setState(() {});
         break;
     }

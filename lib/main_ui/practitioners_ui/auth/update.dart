@@ -83,7 +83,7 @@ class _PatientRegisterScreenState2 extends State<ServiceProviderUpdateScreen>
 
   Future<void> _getUserAddress() async {
     List<Address> addressList =
-    await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
+        await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
     if (addressList.isNotEmpty) {
       _addressController.text = addressList[0].addressLine;
       //_userCity = addressList[0].subAdminArea;
@@ -240,7 +240,7 @@ class _PatientRegisterScreenState2 extends State<ServiceProviderUpdateScreen>
           Others.getSizedBox(boxHeight: 0, boxWidth: 8),
           AppLabels.getLabel(
             labelText:
-            _userProfileSnapshot == null ? 'CUSTOMER' : 'EDIT PROFILE',
+                _userProfileSnapshot == null ? 'CUSTOMER' : 'EDIT PROFILE',
             size: 21,
             labelColor: Colors.black,
             isBold: false,

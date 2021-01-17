@@ -92,13 +92,13 @@ class _TraditionalHealersScreenTwoState
               items: _comercialProductsList
                   .map(
                     (item) => DropdownMenuItem(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(item),
-                  ),
-                  value: item,
-                ),
-              )
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(item),
+                      ),
+                      value: item,
+                    ),
+                  )
                   .toList(),
               onChanged: (item) {
                 setState(() {
@@ -153,7 +153,7 @@ class _TraditionalHealersScreenTwoState
           AppTextFields.getTextField(
             controller: _startAndEndOfTrainingController,
             label:
-            'When did you start and conclude yorur official training/initiation',
+                'When did you start and conclude yorur official training/initiation',
             isPassword: false,
             isNumber: false,
           ),
@@ -216,11 +216,11 @@ class _TraditionalHealersScreenTwoState
         // String commercialProduct = _comercialProductsController.text.trim();
         String ukuthawasaStartDate = _ukuthawasaStartDateController.text.trim();
         String start_end_training_control =
-        _startAndEndOfTrainingController.text.trim();
+            _startAndEndOfTrainingController.text.trim();
         String teacher = _teacherNameController.text.trim();
         String uGhobelLocation = _uGhobelaLocationController.text.trim();
         String homecommingCermonyLocation =
-        _finalHomecomingCeremonyController.text.trim();
+            _finalHomecomingCeremonyController.text.trim();
         String reference = _threePeopleReferenceController.text.trim();
         widget._userData.addAll({
           AppKeys.COMERICAL_PRODUCTS: _selectedComercialProduct,

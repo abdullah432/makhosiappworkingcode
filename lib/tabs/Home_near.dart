@@ -130,7 +130,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
             ? AppStatusComponents.errorBody(message: _error)
             : _practitioners.isEmpty
                 ? AppStatusComponents.errorBody(
-                    message: 'No practitioner in your area')
+                    message: 'No businesses in your area')
                 : _getBody();
   }
 

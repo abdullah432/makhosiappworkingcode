@@ -172,23 +172,23 @@ class _TraditionalHealersScreenThreeState
         AppKeys.ASSOCIATION_NUMBER: association,
       });
       //update data to user account
-     // RegisterHelper helper = RegisterHelper();
+      // RegisterHelper helper = RegisterHelper();
       setState(() {
         _isLoading = true;
       });
-     // final result = await helper.updateTraditionalHealerDataToFirestore(
-       //   userInfoMap: widget._userData);
+      // final result = await helper.updateTraditionalHealerDataToFirestore(
+      //   userInfoMap: widget._userData);
       setState(() {
         _isLoading = false;
       });
-     // if (result) {
-        AppToast.showToast(message: 'Registration Sucess');
-        NavigationController.push(
-          context,
-          TraditionalHealerRegisterSuccessScreen(ClickType.PRACTITIONER),
-        );
+      // if (result) {
+      AppToast.showToast(message: 'Registration Sucess');
+      NavigationController.push(
+        context,
+        TraditionalHealerRegisterSuccessScreen(ClickType.PRACTITIONER),
+      );
       //} else {
-       // AppToast.showToast(message: 'Registration Fail');
+      // AppToast.showToast(message: 'Registration Fail');
       //}
     }
   }

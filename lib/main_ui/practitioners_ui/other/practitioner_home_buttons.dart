@@ -212,7 +212,7 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
                   // BusinessCard2(snapshot['id'], firstName, location, years,
                   //     language, service, instagram, linkedin, fb, whatsapp));
                   BusinessCard());
-              },
+            },
             child: Row(
               children: [
                 Text('BUSINESS INFO',
@@ -288,7 +288,7 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
       Others.showInfoDialog(
         context: context,
         title: 'Log Out?',
-        message: 'Are youn sure you want to log out of the app?',
+        message: 'Are you sure you want to log out of the app?',
         positiveButtonLabel: 'LOG OUT',
         negativeButtonLabel: 'CANCEL',
         iInfoDialogClicked: this,
