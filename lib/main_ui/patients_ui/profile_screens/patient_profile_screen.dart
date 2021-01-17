@@ -466,9 +466,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                       onTap: () {
                         NavigationController.push(
                           context,
-                          SettingPage(),
-                        );
-
+                          SettingPage( widget._snapshot.get(AppKeys.FULL_NAME)));
                       },
                     ),
                   ),

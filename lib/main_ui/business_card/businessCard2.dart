@@ -25,7 +25,8 @@ class BusinessCard2 extends StatefulWidget {
       instagram,
       linkedin,
       fb,
-      whatsapp;
+      whatsapp,
+  description;
   BusinessCard2(
       this.id,
       this.firstname,
@@ -36,7 +37,7 @@ class BusinessCard2 extends StatefulWidget {
       this.instagram,
       this.linkedin,
       this.fb,
-      this.whatsapp);
+      this.whatsapp,this.description);
   @override
   _BusinessCardState createState() => _BusinessCardState(
       this.firstname,
@@ -47,7 +48,7 @@ class BusinessCard2 extends StatefulWidget {
       this.instagram,
       this.linkedin,
       this.fb,
-      this.whatsapp);
+      this.whatsapp,this.description);
 }
 
 class _BusinessCardState extends State<BusinessCard2> {
@@ -59,9 +60,9 @@ class _BusinessCardState extends State<BusinessCard2> {
       instagram,
       linkedin,
       fb,
-      whatsapp;
+      whatsapp,description;
   _BusinessCardState(this.firstname, this.location, this.years, this.language,
-      this.service, this.instagram, this.linkedin, this.fb, this.whatsapp);
+      this.service, this.instagram, this.linkedin, this.fb, this.whatsapp,this.description);
   /* static final FacebookLogin facebookSignIn = new FacebookLogin();
   String _message = 'Log in/out by pressing the buttons below.';
   Future<Null> _login() async {
@@ -473,7 +474,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
-                                      'Thembi Ndlovu is an acreditated Herbalist, with over 5 years experience.  Currently based in Gauteng Province, ',
+                                      '${description}',
                                       style: TextStyle(
                                         color: AppColors.BUSINESS_TEXT3,
                                         fontWeight: FontWeight.w400,

@@ -25,6 +25,8 @@ import 'package:makhosi_app/Screens/notification_screen.dart';
 
 import 'login_screen.dart';
 class SettingPage extends StatefulWidget {
+  String name;
+  SettingPage(this.name);
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -132,7 +134,7 @@ class _SettingPageState extends State<SettingPage>
                             ),
                           ),
 
-                          title: Text('Thembi’s Butcher'),
+                          title: Text(widget.name),
                           trailing: GestureDetector(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
@@ -142,7 +144,7 @@ class _SettingPageState extends State<SettingPage>
                           subtitle: Row(
                             children: [
                               Icon(Icons.star,color: Colors.yellow,),
-                              Text('4.8 (53)')
+                              Text('No ratings')
                             ],
                           )
                       ),

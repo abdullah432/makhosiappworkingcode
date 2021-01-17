@@ -21,6 +21,7 @@ import 'package:makhosi_app/tabs/recentprofiles.dart';
 import 'package:makhosi_app/main_ui/general_ui/settingpage2.dart';
 import 'package:makhosi_app/tabs/providers.dart';
 import 'package:makhosi_app/tabs/Home_near.dart';
+import 'package:makhosi_app/secondMain.dart';
 
 class AllTab extends StatefulWidget {
   dynamic _snapshot;
@@ -117,7 +118,7 @@ class _AllTabState extends State<AllTab> {
                   onTap: () {
                     NavigationController.push(
                       context,
-                      SettingPage(),
+                      SettingPage(widget._snapshot.get(AppKeys.FULL_NAME)),
                     );
                   },
                   child: Container(
@@ -196,6 +197,15 @@ class _AllTabState extends State<AllTab> {
           SizedBox(
             height: 5,
           ),
+          GestureDetector(
+            onTap: (){
+              NavigationController.push(
+                context,
+                app(),
+              );
+            },
+            child:
+
           ClipRRect(
             borderRadius: BorderRadius.circular(16.0),
             child: new Container(
@@ -214,11 +224,12 @@ class _AllTabState extends State<AllTab> {
                 dotBgColor: Colors.transparent,
               ),
             ),
+          )
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
-          Row(
+         /* Row(
             children: [
               Text(
                 "Favourite Service Providers",
@@ -248,7 +259,7 @@ class _AllTabState extends State<AllTab> {
             ],
           ),
 
-          FrequentProducts(),
+          FrequentProducts(),*/
 
           Text(
             "Popular Businesses Near You",
@@ -377,7 +388,7 @@ class _AllTabState extends State<AllTab> {
     dynamic fb = " ";
     dynamic whatsapp = " ";
     String image = ' ';
-
+String des;
     firstName = snapshot['prefered_buisness_name'];
     secondName = snapshot[AppKeys.SECOND_NAME];
     location = snapshot[AppKeys.ADDRESS];
@@ -389,6 +400,7 @@ class _AllTabState extends State<AllTab> {
     fb = snapshot['FbList'];
     whatsapp = snapshot['WhatsappList'];
     image = snapshot['id_picture'];
+    des=snapshot['service_brief_description'];
 
     if (firstName == null) {
       firstName = " ";
@@ -407,7 +419,7 @@ class _AllTabState extends State<AllTab> {
           NavigationController.push(
             context,
             BusinessCard2(snapshot['id'], firstName, location, years, language,
-                service, instagram, linkedin, fb, whatsapp),
+                service, instagram, linkedin, fb, whatsapp,des),
           );
         },
         child: Container(
@@ -468,6 +480,7 @@ class _AllTabState extends State<AllTab> {
     dynamic fb = " ";
     dynamic whatsapp = " ";
     String image = ' ';
+    String des;
 
     firstName = snapshot['prefered_buisness_name'];
     secondName = snapshot[AppKeys.SECOND_NAME];
@@ -480,6 +493,8 @@ class _AllTabState extends State<AllTab> {
     fb = snapshot['FbList'];
     whatsapp = snapshot['WhatsappList'];
     image = snapshot['id_picture'];
+    des=snapshot['service_brief_description'];
+
 
     if (firstName == null) {
       firstName = " ";
@@ -498,7 +513,7 @@ class _AllTabState extends State<AllTab> {
           NavigationController.push(
             context,
             BusinessCard2(snapshot['id'], firstName, location, years, language,
-                service, instagram, linkedin, fb, whatsapp),
+                service, instagram, linkedin, fb, whatsapp,des),
           );
         },
         child: Container(

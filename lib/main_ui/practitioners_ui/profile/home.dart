@@ -22,6 +22,7 @@ import 'package:makhosi_app/main_ui/practitioners_ui/profile/home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/profile/profile.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
+import 'package:makhosi_app/secondMain.dart';
 
 class AllTab extends StatefulWidget {
   dynamic _snapshot;
@@ -192,25 +193,34 @@ class _AllTabState extends State<AllTab> {
           SizedBox(
             height: 5,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16.0),
-            child: new Container(
-              height: 170.0,
-              child: new Carousel(
-                boxFit: BoxFit.cover,
-                images: [
-                  AssetImage('images/anouncement.png'),
-                  AssetImage('images/splash_app_logo.png'),
-                  AssetImage('images/anouncement.png'),
-                ],
-                autoplay: true,
-                dotSize: 4.0,
-                //dotColor: ,
-                indicatorBgPadding: 2.0,
-                dotBgColor: Colors.transparent,
+          GestureDetector(
+            onTap:(){
+              NavigationController.push(
+                context,
+                app(),
+              );
+            },
+            child:ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: new Container(
+                height: 170.0,
+                child: new Carousel(
+                  boxFit: BoxFit.cover,
+                  images: [
+                    AssetImage('images/anouncement.png'),
+                    AssetImage('images/splash_app_logo.png'),
+                    AssetImage('images/anouncement.png'),
+                  ],
+                  autoplay: true,
+                  dotSize: 4.0,
+                  //dotColor: ,
+                  indicatorBgPadding: 2.0,
+                  dotBgColor: Colors.transparent,
+                ),
               ),
             ),
           ),
+
           SizedBox(
             height: 10,
           ),
@@ -262,6 +272,12 @@ class _AllTabState extends State<AllTab> {
           ),
           Card(
             child: ListTile(
+              onTap: (){
+                NavigationController.push(
+                  context,
+                  app(),
+                );
+              },
                 leading: Image.asset(
                   'images/seminar.png',
                   fit: BoxFit.cover,
@@ -303,6 +319,7 @@ class _AllTabState extends State<AllTab> {
     dynamic linkedin = " ";
     dynamic fb = " ";
     dynamic whatsapp = " ";
+    String des;
 
     firstName = snapshot['prefered_buisness_name'];
     secondName = snapshot[AppKeys.SECOND_NAME];
@@ -314,6 +331,7 @@ class _AllTabState extends State<AllTab> {
     linkedin = snapshot['LinkedInList'];
     fb = snapshot['FbList'];
     whatsapp = snapshot['WhatsappList'];
+    des=snapshot['service_brief_description'];
 
     if (firstName == null) {
       firstName = " ";
@@ -332,7 +350,7 @@ class _AllTabState extends State<AllTab> {
         NavigationController.push(
           context,
           BusinessCard2(snapshot['id'], firstName, location, years, language,
-              service, instagram, linkedin, fb, whatsapp),
+              service, instagram, linkedin, fb, whatsapp,des),
         );
       },
       child: Container(

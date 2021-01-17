@@ -126,7 +126,7 @@ class _profileState extends State<profile2> {
                             Icons.star,
                             color: Colors.yellow,
                           ),
-                          Text('4.8 (53)')
+                          Text('No Rating')
                         ],
                       )),
                 ),
@@ -272,13 +272,7 @@ class _profileState extends State<profile2> {
                     //trailing: Text('\$2,800')
                   ),
                 ),
-                Card(
-                  child: ListTile(
-                    leading: Image.asset('images/ic_records.png'),
-                    title: Text('My Business'),
-                    //trailing: Text('\$2,800')
-                  ),
-                ),
+
                 Card(
                   child: ListTile(
                     onTap: () {
@@ -324,20 +318,7 @@ class _profileState extends State<profile2> {
                     //trailing: Text('\$2,800')
                   ),
                 ),
-                Card(
-                  child: ListTile(
-                    leading: Image.asset('images/Star.png'),
-                    title: Text('User Feedback'),
-                    //trailing: Text('\$2,800')
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    leading: Image.asset('images/ic_referral_code.png'),
-                    title: Text('Referral code'),
-                    //trailing: Text('\$2,800')
-                  ),
-                ),
+
                 Card(
                   child: ListTile(
                     onTap: () {

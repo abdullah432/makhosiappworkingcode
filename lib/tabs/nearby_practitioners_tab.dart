@@ -313,6 +313,8 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
     dynamic fb = " ";
     dynamic whatsapp = " ";
     whatsapp = snapshot['WhatsappList'];
+    String des;
+    des=snapshot['service_brief_description'];
 
     image = snapshot['id_picture'];
     firstName = snapshot['prefered_buisness_name'];
@@ -525,7 +527,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                               instagram,
                               linkedin,
                               fb,
-                              whatsapp),
+                              whatsapp, des),
                         );
                       },
                       child: Text(

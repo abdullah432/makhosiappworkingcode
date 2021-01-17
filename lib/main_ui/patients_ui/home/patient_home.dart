@@ -205,7 +205,7 @@ class _PatientHomeState extends State<PatientHome> {
     } else if (currentIndex == 2) {
       return PractitionerInboxScreen();
     } else if (currentIndex == 3) {
-      return SettingPage();
+      return SettingPage(_userProfileSnapshot.get(AppKeys.FULL_NAME));
     }
   }
 
@@ -236,7 +236,7 @@ class _PatientHomeState extends State<PatientHome> {
               activeColor: Colors.white,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-            icon: Image.asset('images/wallet white.png', height: 28, width: 28),
+            icon: Image.asset('images/e.png', height: 28, width: 28),
             title: Text('Inbox'),
             activeColor: Colors.white,
             // inactiveColor: Colors.black
