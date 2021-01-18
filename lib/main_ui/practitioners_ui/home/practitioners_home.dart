@@ -37,10 +37,11 @@ class _PractitionersHomeState extends State<PractitionersHome> {
         .collection(AppKeys.PRACTITIONERS)
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get()
-        .then((value) {
+        .then((snapshot) {
       setState(() {
-        print(value.data());
-        _snapshot = value.data();
+        // print(snapshot.data());
+        _snapshot = snapshot.data();
+        // _snapshot = snapshot;
         _isLoading = false;
       });
     }).catchError((error) {

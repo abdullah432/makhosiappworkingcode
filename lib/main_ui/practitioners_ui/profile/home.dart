@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -38,9 +39,13 @@ class _AllTabState extends State<AllTab> {
   List<dynamic> _dataList = [];
   bool _isLoading = true;
 
+  //profile picture
+  String profilepicture;
+
   @override
   void initState() {
-    _dataList = new List();
+    profilepicture = _snapshot['id_picture'];
+    _dataList = [];
     _getData();
     super.initState();
   }
@@ -119,22 +124,28 @@ class _AllTabState extends State<AllTab> {
                       profile2(_snapshot),
                     );
                   },
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    margin: EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: ExactAssetImage('images/circleavater.png'),
-                        fit: BoxFit.cover,
-                      ),
-                      border: Border.all(
-                        color: Color(
-                          0xff6043f5,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: profilepicture != null
+                              ? CachedNetworkImageProvider(profilepicture)
+                              : AssetImage(
+                                  "images/circleavater.png",
+                                ),
+                          fit: BoxFit.cover,
                         ),
-                        width: 1,
+                        border: Border.all(
+                          color: Color(
+                            0xff6043f5,
+                          ),
+                          width: 1,
+                        ),
+                        shape: BoxShape.circle,
                       ),
-                      shape: BoxShape.circle,
                     ),
                   ),
                 )

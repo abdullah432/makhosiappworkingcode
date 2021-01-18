@@ -118,13 +118,16 @@ class _profileState extends State<profile2> {
                             print('task');
                             task.onComplete.then((_) async {
                               print('before pushing');
+                              String downloadurl = await _.ref.getDownloadURL();
                               await FirebaseFirestore.instance
                                   .collection('service_provider')
                                   .doc(uid)
-                                  .set({
-                                'profile_image': await _.ref.getDownloadURL()
-                              }, SetOptions(merge: true));
-                              setState(() {});
+                                  .set({'id_picture': downloadurl},
+                                      SetOptions(merge: true));
+                              setState(() {
+                                snapshot['id_picture'] = downloadurl;
+                                profilepicture = downloadurl;
+                              });
                               // NavigationController.pushReplacement(
                               //     context,
                               //     PractitionersProfileScreen(
@@ -525,68 +528,5 @@ class _profileState extends State<profile2> {
                 )),
           ),
         ]));
-  }
-
-  Widget _getImageSection() {
-    String pic = " ";
-
-    pic = snapshot[AppKeys.ID_PICTURE];
-    return GestureDetector(
-      onTap: !_isViewer
-          ? () async {
-              PickedFile pickedFile = await ImagePicker().getImage(
-                source: ImageSource.gallery,
-                imageQuality: 25,
-              );
-              if (pickedFile != null) {
-                StorageReference ref = FirebaseStorage.instance
-                    .ref()
-                    .child('profile_images/${snapshot.id}.jpg');
-                StorageUploadTask task = ref.putFile(File(pickedFile.path));
-                task.onComplete.then((_) async {
-                  await FirebaseFirestore.instance
-                      .collection('practitioners')
-                      .doc(snapshot.id)
-                      .set({'profile_image': await _.ref.getDownloadURL()},
-                          SetOptions(merge: true));
-                  NavigationController.pushReplacement(
-                      context,
-                      PractitionersProfileScreen(
-                          _isViewer,
-                          await FirebaseFirestore.instance
-                              .collection('service_provider')
-                              .doc(snapshot.id)
-                              .get()));
-                }).catchError((error) {
-                  print(error);
-                });
-              }
-            }
-          : null,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(
-              color: Colors.white,
-              width: 12,
-            ),
-          ),
-          child: snapshot == null
-              ? Others.getProfilePlaceHOlder()
-              : pic == null
-                  ? Others.getProfilePlaceHOlder()
-                  : CircleAvatar(
-                      radius: 18,
-                      backgroundImage: NetworkImage(
-                        pic,
-                      ),
-                    ),
-        ),
-      ),
-    );
   }
 }
