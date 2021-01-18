@@ -357,7 +357,7 @@ class _profileState extends State<profile2> {
                 Card(
                   child: ListTile(
                     leading: Image.asset('images/ic_records.png'),
-                    title: Text('My Business'),
+                    title: Text('My Consultations'),
                     //trailing: Text('\$2,800')
                   ),
                 ),
