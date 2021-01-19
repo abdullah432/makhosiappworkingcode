@@ -19,7 +19,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
         onTap: (){Navigator.of(context).pop();},
         ),
       ),
-      body: ListView(
+      body:Center(
+        child: Text(
+          'No new notifications at the moment',style:TextStyle(color:Colors.white)
+        ),
+      ) /*ListView(
         padding: EdgeInsets.all(20),
         children: [
           Row(
@@ -266,7 +270,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
 
         ],
-      ),
+      ),*/
     );
   }
 }

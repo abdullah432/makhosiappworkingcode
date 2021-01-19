@@ -407,20 +407,6 @@ class _profileState extends State<profile2> {
                 ),
                 Card(
                   child: ListTile(
-                    leading: Image.asset('images/Star.png'),
-                    title: Text('User Feedback'),
-                    //trailing: Text('\$2,800')
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    leading: Image.asset('images/ic_referral_code.png'),
-                    title: Text('Referral code'),
-                    //trailing: Text('\$2,800')
-                  ),
-                ),
-                Card(
-                  child: ListTile(
                     onTap: () {
                       NavigationController.push(
                         context,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:language_pickers/language_picker_dialog.dart';
 import 'package:language_pickers/languages.dart';
 import 'package:language_pickers/utils/utils.dart';
+import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/contracts/i_info_dialog_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/main_ui/patients_ui/auth/update.dart';
@@ -26,6 +27,8 @@ import 'package:makhosi_app/utils/string_constants.dart';
 import 'login_screen.dart';
 
 class SettingPage extends StatefulWidget {
+  String name;
+  SettingPage(this.name);
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -108,13 +111,51 @@ class _SettingPageState extends State<SettingPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Setting',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
-                        fontFamily: 'Poppins',
-                      ),
+                    Card(
+                      child: ListTile(
+                          leading: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  "images/circleavater.png",
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                              border: Border.all(
+                                color: Color(
+                                  0xff6043f5,
+                                ),
+                                width: 1,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          title: Text(widget.name),
+                          trailing: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          new NotificationScreen()));
+                            },
+                            child: Image.asset(
+                              'images/notification.png',
+                              height: 30,
+                              width: 30,
+                            ),
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                              ),
+                              Text('No ratings')
+                            ],
+                          )),
                     ),
                     Column(
                       children: listOfSettingItems

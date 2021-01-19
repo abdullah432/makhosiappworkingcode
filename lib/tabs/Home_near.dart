@@ -310,6 +310,9 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
     linkedin = snapshot['LinkedInList'];
     fb = snapshot['FbList'];
     isOnline = snapshot[AppKeys.ONLINE];
+    String des;
+    des=snapshot['service_brief_description'];
+
     if (firstName == null) {
       firstName = " ";
     }
@@ -485,7 +488,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
                               instagram,
                               linkedin,
                               fb,
-                              whatsapp),
+                              whatsapp,des),
                         );
                       },
                       child: Text(

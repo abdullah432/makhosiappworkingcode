@@ -438,27 +438,23 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
               ? Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
-                    width: 45,
-                    height: 45,
-                    margin: EdgeInsets.only(right: 15, top: 50),
-                    child: Stack(
-                      children: [
+                      width: 45,
+                      height: 45,
+                      margin: EdgeInsets.only(right: 15, top: 50),
+                      child: Stack(children: [
                         Align(
                           alignment: Alignment.bottomRight,
                           child: GestureDetector(
                             child: Image.asset('images/setting.png'),
                             onTap: () {
                               NavigationController.push(
-                                context,
-                                SettingPage(),
-                              );
+                                  context,
+                                  SettingPage(
+                                      widget._snapshot.get(AppKeys.FULL_NAME)));
                             },
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                )
+                      ])))
               : Container(),
           Align(
             alignment: Alignment.bottomLeft,

@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:makhosi_app/secondMain.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
 
 
 
@@ -78,7 +80,14 @@ class _Single_productState extends State<Single_product> {
   Widget build(BuildContext context) {
     List<String> images = new List();
 
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        NavigationController.push(
+          context,
+          app(),
+        );
+      },
+      child: Container(
       height: 250,
       margin:EdgeInsets.symmetric(vertical: 22, horizontal: 5),
 
@@ -108,6 +117,7 @@ class _Single_productState extends State<Single_product> {
             ],
           ),
         ),
+      )
     );
   }}
 
