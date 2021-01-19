@@ -112,7 +112,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
         new SizedBox(height: 20.0),
         new TextFormField(
-          keyboardType: TextInputType.numberWithOptions(),
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Enter Email',

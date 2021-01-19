@@ -21,7 +21,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
       body:Center(
         child: Text(
-          'No new notifications at the moment'
+          'No new notifications at the moment',style:TextStyle(color:Colors.white)
         ),
       ) /*ListView(
         padding: EdgeInsets.all(20),
