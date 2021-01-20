@@ -28,7 +28,7 @@ main() async {
         fontFamily: 'Poppins',
         primaryColor: AppColors.COLOR_PRIMARY,
         accentColor: AppColors.COLOR_PRIMARY,
-        cursorColor: AppColors.COLOR_GREY,
+        // cursorColor: AppColors.COLOR_GREY,
         colorScheme: ColorScheme.light(primary: AppColors.COLOR_PRIMARY),
       ),
       home: SplashScreen(),
